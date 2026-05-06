@@ -72,11 +72,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const providerModeBox = document.getElementById("providerModeBox");
 
+  /**
+   * الحصول على القيمة المحددة من مجموعة خيارات radiogroup
+   * @param {string} name - اسم مجموعة radio buttons
+   * @returns {string} القيمة المحددة أو نص فارغ
+   */
   function getCheckedValue(name) {
     const checked = document.querySelector(`input[name="${name}"]:checked`);
     return checked ? checked.value : "";
   }
 
+  /**
+   * إظihkan الخطوة المحددة وإخفاء الخطوات الأخرى
+   * @param {number} step - رقم الخطوة المراد إظهارها
+   */
   function showStep(step) {
     panels.forEach(panel => {
       panel.classList.remove("active");
@@ -176,7 +185,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  /**
+   * التحقق من صحة بيانات الخطوة الحالية في نموذج التسجيل
+   * @param {number} step - رقم الخطوة الحالية (1-4)
+   * @returns {boolean} true إذا كانت البيانات صالحة
+   */
   function validateStep(step) {
+    // الخطوة 1: التحقق من البيانات الشخصية الأساسية
     if (step === 1) {
       const name = document.getElementById("name").value.trim();
       const username = document.getElementById("username").value.trim();
@@ -189,6 +204,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
+    // الخطوة 2: التحقق من اختيار الدور
     if (step === 2) {
       const role = getCheckedValue("user_role");
 
@@ -197,12 +213,14 @@ document.addEventListener("DOMContentLoaded", function () {
         return false;
       }
 
+      // التحقق من نوع التقديم إذا كان مقدم خدمة
       if ((role === "provider" || role === "both") && !getCheckedValue("provider_mode")) {
         alert("يرجى اختيار نوع التقديم");
         return false;
       }
     }
 
+    // الخطوة 3: التحقق من كلمة المرور
     if (step === 3) {
       const password = document.getElementById("password").value;
       const confirm = document.getElementById("password_confirmation").value;
