@@ -28,24 +28,24 @@ document.addEventListener('DOMContentLoaded', () => {
     revealTargets.forEach(el => observer.observe(el));
   } else {
     revealTargets.forEach(el => el.classList.add('is-visible'));
-  } 
+  }
 }
 );
 
 document.addEventListener('DOMContentLoaded', () => {
-  const editBtn = document.querySelector('.btn-light'); 
+  const editBtn = document.querySelector('.btn-light');
   const modal = document.getElementById('editModal');
   const closeBtn = document.getElementById('closeModal');
   const cancelBtn = document.getElementById('cancelBtn');
 
-  
+
   editBtn.addEventListener('click', () => {
-      modal.classList.add('active');
+    modal.classList.add('active');
   });
 
 
   const closeModal = () => {
-      modal.classList.remove('active');
+    modal.classList.remove('active');
   };
 
   closeBtn.addEventListener('click', closeModal);
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   window.addEventListener('click', (e) => {
-      if (e.target === modal) closeModal();
+    if (e.target === modal) closeModal();
   });
 });
 
@@ -187,6 +187,23 @@ document.addEventListener("DOMContentLoaded", function () {
         alert("يرجى تعبئة جميع الحقول في الخطوة الأولى");
         return false;
       }
+      // Validation 
+
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const phonePattern = /^[0-9]{10}$/;
+
+      // Email Validation 
+      if (!emailPattern.test(email)) {
+        alert("يرجى إدخال بريد إلكتروني صحيح");
+        return false;
+      }
+
+      // Phone Validation 
+      if (!phonePattern.test(phone)) {
+        alert("رقم الجوال يجب أن يكون 10 أرقام");
+        return false;
+      }
+
     }
 
     if (step === 2) {
@@ -252,4 +269,23 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   showStep(currentStep);
+});
+
+// Show or hide password
+document.querySelectorAll(".toggle-password").forEach(function (button) {
+  button.addEventListener("click", function () {
+    const inputId = this.getAttribute("data-target");
+    const input = document.getElementById(inputId);
+    const icon = this.querySelector("i");
+
+    if (input.type === "password") {
+      input.type = "text";
+      icon.classList.remove("bi-eye");
+      icon.classList.add("bi-eye-slash");
+    } else {
+      input.type = "password";
+      icon.classList.remove("bi-eye-slash");
+      icon.classList.add("bi-eye");
+    }
+  });
 });

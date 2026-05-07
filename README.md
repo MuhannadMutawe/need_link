@@ -3,9 +3,11 @@
 Simple ready-to-use Bootstrap 5 starter template.
 
 ## Features
-- Bootstrap 5 CDN
+- Bootstrap 5 CDN (Framework)
+- JS code
+- CSS code
 - Clean folder structure
 - Ready for GitHub upload
 
 ## Usage
-Just open index.html in your browser.
+Just open Landing-page.html in your browser.
