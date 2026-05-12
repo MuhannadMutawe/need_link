@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="../assets/logo/logo.png" type="image/png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>لوحة المسؤول - NeedLink</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="../css/bootstrap.css">
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="../css/styles.css">
+
+  <!-- Dashboard CSS -->
+  <link rel="stylesheet" href="../css/dashboard.css">
+</head>
+
+<body class="admin-body">
+
+  <!-- Mobile Navbar -->
+  <nav class="navbar bg-white border-bottom sticky-top d-lg-none">
+    <div class="container-fluid">
+      <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" href="#">
+        <img src="../assets/logo/logo.png" class="admin-logo-img" alt="NeedLink Logo">
+        <span><span class="text-orange">Need</span><span class="text-blue">Link</span></span>
+      </a>
+
+      <button class="btn btn-outline-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar">
+        <i class="bi bi-list"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Sidebar -->
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="mobileSidebar">
+    <div class="offcanvas-header border-bottom">
+      <h5 class="offcanvas-title fw-bold">لوحة التحكم</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+
+    <div class="offcanvas-body">
+      <div class="list-group admin-side-links">
+        <a href="#" class="list-group-item list-group-item-action active">
+          <i class="bi bi-grid-1x2-fill ms-2"></i> الرئيسية
+        </a>
+        <a href="admin-users.html" class="list-group-item list-group-item-action">
+          <i class="bi bi-people-fill ms-2"></i> المستخدمون
+        </a>
+        <a href="#" class="list-group-item list-group-item-action">
+          <i class="bi bi-person-check-fill ms-2"></i> طلبات التحقق
+        </a>
+        <a href="#" class="list-group-item list-group-item-action">
+          <i class="bi bi-briefcase-fill ms-2"></i> الخدمات
+        </a>
+        <a href="#" class="list-group-item list-group-item-action">
+          <i class="bi bi-flag-fill ms-2"></i> البلاغات
+        </a>
+        <a href="#" class="list-group-item list-group-item-action">
+          <i class="bi bi-gear-fill ms-2"></i> الإعدادات
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row min-vh-100">
+
+      <!-- Desktop Sidebar -->
+      <aside class="col-lg-3 col-xl-2 d-none d-lg-block admin-sidebar-simple p-0">
+        <div class="p-4 border-bottom border-light border-opacity-10">
+          <div class="d-flex align-items-center gap-2">
+            <img src="../assets/logo/logo.png" class="admin-logo-img" alt="NeedLink Logo">
+            <div>
+              <h5 class="mb-0 fw-bold">
+                <span class="text-orange">Need</span><span class="text-blue">Link</span>
+              </h5>
+              <small class="text-white-50">لوحة التحكم</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-3">
+          <div class="list-group admin-side-links">
+            <a href="#" class="list-group-item list-group-item-action active">
+              <i class="bi bi-grid-1x2-fill ms-2"></i> الرئيسية
+            </a>
+
+            <a href="admin-users.html" class="list-group-item list-group-item-action">
+              <i class="bi bi-people-fill ms-2"></i> المستخدمون
+            </a>
+
+            <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+              <span><i class="bi bi-person-check-fill ms-2"></i> طلبات التحقق</span>
+              <span class="badge bg-warning text-dark">8</span>
+            </a>
+
+            <a href="#" class="list-group-item list-group-item-action">
+              <i class="bi bi-briefcase-fill ms-2"></i> الخدمات
+            </a>
+
+            <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+              <span><i class="bi bi-flag-fill ms-2"></i> البلاغات</span>
+              <span class="badge bg-danger">7</span>
+            </a>
+
+            <a href="#" class="list-group-item list-group-item-action">
+              <i class="bi bi-chat-dots-fill ms-2"></i> الرسائل
+            </a>
+
+            <a href="#" class="list-group-item list-group-item-action">
+              <i class="bi bi-bar-chart-fill ms-2"></i> الإحصائيات
+            </a>
+
+            <a href="#" class="list-group-item list-group-item-action">
+              <i class="bi bi-gear-fill ms-2"></i> الإعدادات
+            </a>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="col-lg-9 col-xl-10 admin-main-simple p-0">
+
+        <!-- Topbar -->
+        <header class="bg-white border-bottom px-4 py-3">
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+
+            <div>
+              <h4 class="fw-bold text-dark mb-1">لوحة المسؤول</h4>
+              <p class="text-muted mb-0">مرحبًا بك، تابع نشاط المنصة من هنا</p>
+            </div>
+
+            <div class="d-flex align-items-center gap-2">
+              <div class="input-group admin-search-simple d-none d-md-flex">
+                <span class="input-group-text bg-light border-0">
+                  <i class="bi bi-search"></i>
+                </span>
+                <input type="text" class="form-control bg-light border-0" placeholder="ابحث هنا...">
+              </div>
+
+              <button class="btn btn-light position-relative">
+                <i class="bi bi-bell"></i>
+                <span class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-orange">9</span>
+              </button>
+
+              <button class="btn btn-light">
+                <i class="bi bi-person-circle"></i>
+              </button>
+            </div>
+
+          </div>
+        </header>
+
+        <section class="p-4">
+
+          <!-- Welcome Card -->
+          <div class="card border-0 rounded-4 admin-welcome-simple mb-4">
+            <div class="card-body p-4 p-lg-5">
+              <div class="row align-items-center g-4">
+
+                <div class="col-lg-8">
+                  <span class="badge bg-white bg-opacity-25 mb-3">نظرة عامة</span>
+                  <h2 class="fw-bold mb-3">إدارة NeedLink من مكان واحد</h2>
+                  <p class="mb-0 opacity-75">
+                    راقب المستخدمين، طلبات التحقق، الخدمات المنشورة، البلاغات، وآخر النشاطات داخل المنصة.
+                  </p>
+                </div>
+
+                <div class="col-lg-4 text-lg-end">
+                  <i class="bi bi-shield-check admin-welcome-icon"></i>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- Stats -->
+          <div class="row g-3 mb-4">
+
+            <div class="col-md-6 col-xl-3">
+              <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body">
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="admin-icon-box bg-blue-soft text-blue">
+                      <i class="bi bi-people-fill"></i>
+                    </div>
+                    <div>
+                      <p class="text-muted fw-bold mb-1">إجمالي المستخدمين</p>
+                      <h3 class="fw-bold mb-1">420</h3>
+                      <small class="text-muted">+24 هذا الأسبوع</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-xl-3">
+              <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body">
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="admin-icon-box bg-orange-soft text-orange">
+                      <i class="bi bi-hourglass-split"></i>
+                    </div>
+                    <div>
+                      <p class="text-muted fw-bold mb-1">بانتظار الموافقة</p>
+                      <h3 class="fw-bold mb-1">18</h3>
+                      <small class="text-muted">حسابات تحتاج مراجعة</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-xl-3">
+              <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body">
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="admin-icon-box bg-success-subtle text-success">
+                      <i class="bi bi-briefcase-fill"></i>
+                    </div>
+                    <div>
+                      <p class="text-muted fw-bold mb-1">الخدمات المنشورة</p>
+                      <h3 class="fw-bold mb-1">185</h3>
+                      <small class="text-muted">12 خدمة جديدة</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-xl-3">
+              <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body">
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="admin-icon-box bg-danger-subtle text-danger">
+                      <i class="bi bi-flag-fill"></i>
+                    </div>
+                    <div>
+                      <p class="text-muted fw-bold mb-1">البلاغات المفتوحة</p>
+                      <h3 class="fw-bold mb-1">7</h3>
+                      <small class="text-muted">تحتاج متابعة</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="row g-4">
+
+            <!-- Activities Table -->
+            <div class="col-xl-8">
+              <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-header bg-white border-0 p-4">
+                  <div class="d-flex justify-content-between align-items-center gap-3">
+                    <div>
+                      <h5 class="fw-bold mb-1">آخر النشاطات</h5>
+                      <p class="text-muted mb-0 small">أحدث العمليات التي حدثت داخل المنصة</p>
+                    </div>
+                    <a href="#" class="btn btn-sm btn-outline-primary">عرض الكل</a>
+                  </div>
+                </div>
+
+                <div class="table-responsive">
+                  <table class="table align-middle mb-0">
+                    <thead class="table-light">
+                      <tr>
+                        <th>النشاط</th>
+                        <th>المستخدم</th>
+                        <th>التاريخ</th>
+                        <th>الحالة</th>
+                        <th>إجراء</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      <tr>
+                        <td>
+                          <i class="bi bi-flag-fill text-danger ms-2"></i>
+                          خدمة مبلّغ عنها
+                        </td>
+                        <td>مستخدم #52</td>
+                        <td>اليوم</td>
+                        <td><span class="badge bg-danger-subtle text-danger">مراجعة</span></td>
+                        <td><button class="btn btn-sm btn-dark">فتح</button></td>
+                      </tr>
+
+                      <tr>
+                        <td>
+                          <i class="bi bi-person-plus-fill text-orange ms-2"></i>
+                          مزود خدمة جديد
+                        </td>
+                        <td>مستخدم #87</td>
+                        <td>اليوم</td>
+                        <td><span class="badge bg-orange-soft text-orange">بانتظار الموافقة</span></td>
+                        <td><button class="btn btn-sm btn-dark">مراجعة</button></td>
+                      </tr>
+
+                      <tr>
+                        <td>
+                          <i class="bi bi-check-circle-fill text-success ms-2"></i>
+                          تم قبول طلب تحقق
+                        </td>
+                        <td>مستخدم #31</td>
+                        <td>أمس</td>
+                        <td><span class="badge bg-success-subtle text-success">مكتمل</span></td>
+                        <td><button class="btn btn-sm btn-dark">تفاصيل</button></td>
+                      </tr>
+
+                      <tr>
+                        <td>
+                          <i class="bi bi-megaphone-fill text-blue ms-2"></i>
+                          إشعار صيانة
+                        </td>
+                        <td>جميع المستخدمين</td>
+                        <td>غدًا</td>
+                        <td><span class="badge bg-blue-soft text-blue">مجدول</span></td>
+                        <td><button class="btn btn-sm btn-dark">تعديل</button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Review Queue -->
+            <div class="col-xl-4">
+              <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-header bg-white border-0 p-4">
+                  <h5 class="fw-bold mb-1">طلبات تحتاج مراجعة</h5>
+                  <p class="text-muted mb-0 small">أولوية المتابعة اليوم</p>
+                </div>
+
+                <div class="card-body pt-0">
+                  <div class="list-group list-group-flush">
+
+                    <a href="#" class="list-group-item list-group-item-action px-0 py-3">
+                      <div class="d-flex align-items-center gap-3">
+                        <div class="admin-icon-box-sm bg-orange-soft text-orange">
+                          <i class="bi bi-person-vcard-fill"></i>
+                        </div>
+                        <div>
+                          <h6 class="fw-bold mb-1">تأكيد هوية مزود</h6>
+                          <small class="text-muted">3 طلبات جديدة</small>
+                        </div>
+                        <i class="bi bi-chevron-left me-auto text-muted"></i>
+                      </div>
+                    </a>
+
+                    <a href="#" class="list-group-item list-group-item-action px-0 py-3">
+                      <div class="d-flex align-items-center gap-3">
+                        <div class="admin-icon-box-sm bg-danger-subtle text-danger">
+                          <i class="bi bi-exclamation-triangle-fill"></i>
+                        </div>
+                        <div>
+                          <h6 class="fw-bold mb-1">بلاغات خدمات</h6>
+                          <small class="text-muted">7 بلاغات مفتوحة</small>
+                        </div>
+                        <i class="bi bi-chevron-left me-auto text-muted"></i>
+                      </div>
+                    </a>
+
+                    <a href="#" class="list-group-item list-group-item-action px-0 py-3">
+                      <div class="d-flex align-items-center gap-3">
+                        <div class="admin-icon-box-sm bg-blue-soft text-blue">
+                          <i class="bi bi-chat-left-text-fill"></i>
+                        </div>
+                        <div>
+                          <h6 class="fw-bold mb-1">رسائل دعم</h6>
+                          <small class="text-muted">4 رسائل غير مقروءة</small>
+                        </div>
+                        <i class="bi bi-chevron-left me-auto text-muted"></i>
+                      </div>
+                    </a>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Bottom Cards -->
+          <div class="row g-4 mt-1">
+
+            <div class="col-lg-6">
+              <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-header bg-white border-0 p-4">
+                  <h5 class="fw-bold mb-1">أحدث المستخدمين</h5>
+                  <p class="text-muted mb-0 small">آخر حسابات تم إنشاؤها</p>
+                </div>
+
+                <div class="card-body pt-0">
+
+                  <div class="d-flex align-items-center gap-3 py-3 border-bottom">
+                    <div class="admin-avatar bg-blue">م</div>
+                    <div>
+                      <h6 class="fw-bold mb-1">محمد أحمد</h6>
+                      <small class="text-muted">مزود خدمة - تصميم</small>
+                    </div>
+                    <span class="badge bg-success-subtle text-success me-auto">نشط</span>
+                  </div>
+
+                  <div class="d-flex align-items-center gap-3 py-3 border-bottom">
+                    <div class="admin-avatar bg-orange">س</div>
+                    <div>
+                      <h6 class="fw-bold mb-1">سارة خالد</h6>
+                      <small class="text-muted">طالبة - خدمات أكاديمية</small>
+                    </div>
+                    <span class="badge bg-orange-soft text-orange me-auto">مراجعة</span>
+                  </div>
+
+                  <div class="d-flex align-items-center gap-3 py-3">
+                    <div class="admin-avatar bg-dark">أ</div>
+                    <div>
+                      <h6 class="fw-bold mb-1">أحمد علي</h6>
+                      <small class="text-muted">مستخدم جديد</small>
+                    </div>
+                    <span class="badge bg-blue-soft text-blue me-auto">جديد</span>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-6">
+              <div class="card border-0 rounded-4 admin-tip-card h-100">
+                <div class="card-body p-4 p-lg-5 d-flex flex-column justify-content-between">
+                  <div>
+                    <span class="badge bg-white bg-opacity-25 mb-3">تلميح إداري</span>
+                    <h3 class="fw-bold mb-3">راجع طلبات التحقق أولًا</h3>
+                    <p class="mb-4 opacity-75">
+                      يوجد عدد من الحسابات بانتظار الموافقة. مراجعتها بسرعة تساعد على زيادة نشاط المنصة وتحسين ثقة المستخدمين.
+                    </p>
+                  </div>
+
+                  <div>
+                    <button class="btn btn-light fw-bold px-4">مراجعة الآن</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="../js/bootstrap.js"></script>
+
+</body>
+
+</html>

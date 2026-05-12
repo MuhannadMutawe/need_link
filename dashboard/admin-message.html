@@ -1,0 +1,651 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="../assets/logo/logo.png" type="image/png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>الرسائل - NeedLink</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="../css/bootstrap.css">
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="../css/styles.css">
+
+  <!-- Dashboard CSS -->
+  <link rel="stylesheet" href="../css/dashboard.css">
+</head>
+
+<body class="admin-body">
+
+  <!-- Mobile Navbar -->
+  <nav class="navbar bg-white border-bottom sticky-top d-lg-none">
+    <div class="container-fluid">
+      <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" href="#">
+        <img src="../assets/logo/logo.png" class="admin-logo-img" alt="NeedLink Logo">
+        <span><span class="text-orange">Need</span><span class="text-blue">Link</span></span>
+      </a>
+
+      <button class="btn btn-outline-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar">
+        <i class="bi bi-list"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Sidebar -->
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="mobileSidebar">
+    <div class="offcanvas-header border-bottom">
+      <h5 class="offcanvas-title fw-bold">لوحة التحكم</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+
+    <div class="offcanvas-body">
+      <div class="list-group admin-side-links">
+        <a href="admin-dashboard.html" class="list-group-item list-group-item-action">
+          <i class="bi bi-grid-1x2-fill ms-2"></i> لوحة التحكم
+        </a>
+
+        <a href="admin-users.html" class="list-group-item list-group-item-action">
+          <i class="bi bi-people-fill ms-2"></i> المستخدمون
+        </a>
+
+        <a href="#" class="list-group-item list-group-item-action">
+          <i class="bi bi-person-check-fill ms-2"></i> طلبات التحقق
+        </a>
+
+        <a href="#" class="list-group-item list-group-item-action">
+          <i class="bi bi-briefcase-fill ms-2"></i> الخدمات
+        </a>
+
+        <a href="#" class="list-group-item list-group-item-action">
+          <i class="bi bi-flag-fill ms-2"></i> البلاغات
+        </a>
+
+        <a href="admin-messages.html" class="list-group-item list-group-item-action active">
+          <i class="bi bi-chat-dots-fill ms-2"></i> الرسائل
+        </a>
+
+        <a href="#" class="list-group-item list-group-item-action">
+          <i class="bi bi-gear-fill ms-2"></i> الإعدادات
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row min-vh-100">
+
+      <!-- Desktop Sidebar -->
+      <aside class="col-lg-3 col-xl-2 d-none d-lg-block admin-sidebar-simple p-0">
+        <div class="p-4 border-bottom border-light border-opacity-10">
+          <div class="d-flex align-items-center gap-2">
+            <img src="../assets/logo/logo.png" class="admin-logo-img" alt="NeedLink Logo">
+
+            <div>
+              <h5 class="mb-0 fw-bold">
+                <span class="text-orange">Need</span><span class="text-blue">Link</span>
+              </h5>
+              <small class="text-white-50">لوحة التحكم</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-3">
+          <div class="list-group admin-side-links">
+
+            <a href="admin-dashboard.html" class="list-group-item list-group-item-action">
+              <i class="bi bi-grid-1x2-fill ms-2"></i> لوحة التحكم
+            </a>
+
+            <a href="admin-users.html" class="list-group-item list-group-item-action">
+              <i class="bi bi-people-fill ms-2"></i> المستخدمون
+            </a>
+
+            <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+              <span><i class="bi bi-person-check-fill ms-2"></i> طلبات التحقق</span>
+              <span class="badge bg-warning text-dark">18</span>
+            </a>
+
+            <a href="#" class="list-group-item list-group-item-action">
+              <i class="bi bi-briefcase-fill ms-2"></i> الخدمات
+            </a>
+
+            <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+              <span><i class="bi bi-flag-fill ms-2"></i> البلاغات</span>
+              <span class="badge bg-danger">7</span>
+            </a>
+
+            <a href="admin-messages.html" class="list-group-item list-group-item-action active">
+              <i class="bi bi-chat-dots-fill ms-2"></i> الرسائل
+            </a>
+
+            <a href="#" class="list-group-item list-group-item-action">
+              <i class="bi bi-bar-chart-fill ms-2"></i> الإحصائيات
+            </a>
+
+            <a href="#" class="list-group-item list-group-item-action">
+              <i class="bi bi-gear-fill ms-2"></i> الإعدادات
+            </a>
+
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="col-lg-9 col-xl-10 admin-main-simple p-0">
+
+        <!-- Topbar -->
+        <header class="bg-white border-bottom px-4 py-3">
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+
+            <div>
+              <h4 class="fw-bold text-dark mb-1">الرسائل</h4>
+              <p class="text-muted mb-0">إرسال رسائل عامة ومتابعة رسائل البلاغات والدعم</p>
+            </div>
+
+            <div class="d-flex align-items-center gap-2">
+              <div class="input-group admin-search-simple d-none d-md-flex">
+                <span class="input-group-text bg-light border-0">
+                  <i class="bi bi-search"></i>
+                </span>
+                <input type="text" class="form-control bg-light border-0" placeholder="بحث سريع...">
+              </div>
+
+              <button class="btn btn-light position-relative">
+                <i class="bi bi-envelope"></i>
+                <span class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-blue">4</span>
+              </button>
+
+              <button class="btn btn-light position-relative">
+                <i class="bi bi-bell"></i>
+                <span class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-orange">9</span>
+              </button>
+
+              <button class="btn btn-light">
+                <i class="bi bi-person-circle"></i>
+              </button>
+            </div>
+
+          </div>
+        </header>
+
+        <section class="p-4">
+
+          <!-- Page Header -->
+          <div class="card border-0 shadow-sm rounded-4 mb-4">
+            <div class="card-body p-4">
+              <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3">
+
+                <div>
+                  <span class="badge bg-blue-soft text-blue mb-3">Messages Center</span>
+                  <h3 class="fw-bold text-dark mb-2">مركز الرسائل والتنبيهات</h3>
+                  <p class="text-muted mb-0">
+                    من هنا يمكنك إرسال رسالة لجميع المستخدمين، ومتابعة رسائل البلاغات أو الدعم.
+                  </p>
+                </div>
+
+                <button class="btn btn-primary-custom px-4 py-2 fw-bold" data-bs-toggle="modal"
+                  data-bs-target="#sendMessageModal">
+                  <i class="bi bi-send-fill ms-1"></i>
+                  إرسال رسالة عامة
+                </button>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- Stats -->
+          <div class="row g-3 mb-4">
+
+            <div class="col-md-6 col-xl-3">
+              <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body">
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="admin-icon-box bg-blue-soft text-blue">
+                      <i class="bi bi-megaphone-fill"></i>
+                    </div>
+                    <div>
+                      <p class="text-muted fw-bold mb-1">رسائل عامة</p>
+                      <h3 class="fw-bold mb-1">12</h3>
+                      <small class="text-muted">تم إرسالها</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-xl-3">
+              <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body">
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="admin-icon-box bg-orange-soft text-orange">
+                      <i class="bi bi-envelope-exclamation-fill"></i>
+                    </div>
+                    <div>
+                      <p class="text-muted fw-bold mb-1">رسائل جديدة</p>
+                      <h3 class="fw-bold mb-1">4</h3>
+                      <small class="text-muted">تحتاج قراءة</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-xl-3">
+              <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body">
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="admin-icon-box bg-danger-subtle text-danger">
+                      <i class="bi bi-flag-fill"></i>
+                    </div>
+                    <div>
+                      <p class="text-muted fw-bold mb-1">بلاغات مفتوحة</p>
+                      <h3 class="fw-bold mb-1">7</h3>
+                      <small class="text-muted">بانتظار المتابعة</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-xl-3">
+              <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body">
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="admin-icon-box bg-success-subtle text-success">
+                      <i class="bi bi-check-circle-fill"></i>
+                    </div>
+                    <div>
+                      <p class="text-muted fw-bold mb-1">تم حلها</p>
+                      <h3 class="fw-bold mb-1">25</h3>
+                      <small class="text-muted">بلاغات ورسائل</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="row g-4">
+
+            <!-- Broadcast Form -->
+            <div class="col-xl-5">
+              <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-header bg-white border-0 p-4">
+                  <h5 class="fw-bold mb-1">إرسال رسالة لجميع المستخدمين</h5>
+                  <p class="text-muted mb-0 small">استخدمها للإعلانات العامة والتنبيهات المهمة</p>
+                </div>
+
+                <div class="card-body pt-0">
+                  <form id="broadcastForm">
+
+                    <div class="mb-3">
+                      <label class="form-label fw-bold" for="messageTitle">عنوان الرسالة</label>
+                      <input type="text" class="form-control bg-light border-0" id="messageTitle"
+                        placeholder="مثال: تنبيه صيانة">
+                    </div>
+
+                    <div class="mb-3">
+                      <label class="form-label fw-bold" for="messageTarget">إرسال إلى</label>
+                      <select class="form-select bg-light border-0" id="messageTarget">
+                        <option value="all">جميع المستخدمين</option>
+                        <option value="students">الطلاب فقط</option>
+                        <option value="providers">مزودي الخدمات فقط</option>
+                      </select>
+                    </div>
+
+                    <div class="mb-3">
+                      <label class="form-label fw-bold" for="messageType">نوع الرسالة</label>
+                      <select class="form-select bg-light border-0" id="messageType">
+                        <option value="info">إشعار عادي</option>
+                        <option value="warning">تنبيه مهم</option>
+                        <option value="maintenance">صيانة</option>
+                      </select>
+                    </div>
+
+                    <div class="mb-3">
+                      <label class="form-label fw-bold" for="messageBody">نص الرسالة</label>
+                      <textarea class="form-control bg-light border-0" id="messageBody" rows="5"
+                        placeholder="اكتب نص الرسالة هنا..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary-custom w-100 fw-bold py-2">
+                      <i class="bi bi-send-fill ms-1"></i>
+                      إرسال الرسالة
+                    </button>
+
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sent Messages -->
+            <div class="col-xl-7">
+              <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-header bg-white border-0 p-4">
+                  <div class="d-flex justify-content-between align-items-center gap-3">
+                    <div>
+                      <h5 class="fw-bold mb-1">آخر الرسائل المرسلة</h5>
+                      <p class="text-muted mb-0 small">سجل الرسائل العامة التي تم إرسالها</p>
+                    </div>
+                    <span class="badge bg-blue-soft text-blue">Broadcasts</span>
+                  </div>
+                </div>
+
+                <div class="card-body pt-0">
+                  <div class="list-group list-group-flush" id="sentMessagesList">
+
+                    <div class="list-group-item px-0 py-3">
+                      <div class="d-flex justify-content-between gap-3">
+                        <div>
+                          <h6 class="fw-bold mb-1">تنبيه صيانة</h6>
+                          <p class="text-muted mb-1 small">
+                            سيتم إيقاف المنصة لمدة قصيرة غدًا الساعة 10 مساءً.
+                          </p>
+                          <small class="text-muted">إلى: جميع المستخدمين</small>
+                        </div>
+                        <span class="badge bg-orange-soft text-orange h-100">صيانة</span>
+                      </div>
+                    </div>
+
+                    <div class="list-group-item px-0 py-3">
+                      <div class="d-flex justify-content-between gap-3">
+                        <div>
+                          <h6 class="fw-bold mb-1">تحديث جديد</h6>
+                          <p class="text-muted mb-1 small">
+                            تم تحسين تجربة البحث والفلترة داخل المنصة.
+                          </p>
+                          <small class="text-muted">إلى: جميع المستخدمين</small>
+                        </div>
+                        <span class="badge bg-blue-soft text-blue h-100">إشعار</span>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Reports Messages -->
+          <div class="card border-0 shadow-sm rounded-4 overflow-hidden mt-4">
+            <div class="card-header bg-white border-0 p-4">
+              <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3">
+
+                <div>
+                  <h5 class="fw-bold mb-1">رسائل البلاغات والدعم</h5>
+                  <p class="text-muted mb-0 small">الرسائل القادمة من المستخدمين أو البلاغات على الخدمات</p>
+                </div>
+
+                <div class="row g-2 messages-filter-row">
+                  <div class="col-md-6">
+                    <div class="input-group">
+                      <span class="input-group-text bg-light border-0">
+                        <i class="bi bi-search"></i>
+                      </span>
+                      <input type="text" class="form-control bg-light border-0" id="messagesSearch"
+                        placeholder="ابحث بالعنوان أو المستخدم...">
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <select class="form-select bg-light border-0" id="messagesStatusFilter">
+                      <option value="all">كل الحالات</option>
+                      <option value="new">جديد</option>
+                      <option value="open">قيد المتابعة</option>
+                      <option value="closed">مغلق</option>
+                    </select>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th>نوع الرسالة</th>
+                    <th>العنوان</th>
+                    <th>المستخدم</th>
+                    <th>التاريخ</th>
+                    <th>الحالة</th>
+                    <th>إجراء</th>
+                  </tr>
+                </thead>
+
+                <tbody id="messagesTableBody">
+
+                  <tr data-title="بلاغ على خدمة" data-user="محمد أحمد" data-status="new">
+                    <td>
+                      <span class="badge bg-danger-subtle text-danger">
+                        <i class="bi bi-flag-fill ms-1"></i>
+                        بلاغ
+                      </span>
+                    </td>
+                    <td>
+                      <strong>بلاغ على خدمة غير مناسبة</strong>
+                      <p class="text-muted small mb-0">الخدمة تحتوي على وصف غير واضح</p>
+                    </td>
+                    <td>محمد أحمد</td>
+                    <td>اليوم</td>
+                    <td><span class="badge bg-orange-soft text-orange">جديد</span></td>
+                    <td>
+                      <button class="btn btn-sm btn-dark" data-bs-toggle="modal" data-bs-target="#viewReportModal">
+                        عرض
+                      </button>
+                    </td>
+                  </tr>
+
+                  <tr data-title="مشكلة في الحساب" data-user="سارة خالد" data-status="open">
+                    <td>
+                      <span class="badge bg-blue-soft text-blue">
+                        <i class="bi bi-envelope-fill ms-1"></i>
+                        دعم
+                      </span>
+                    </td>
+                    <td>
+                      <strong>مشكلة في الحساب</strong>
+                      <p class="text-muted small mb-0">لا أستطيع تعديل بياناتي الشخصية</p>
+                    </td>
+                    <td>سارة خالد</td>
+                    <td>أمس</td>
+                    <td><span class="badge bg-blue-soft text-blue">قيد المتابعة</span></td>
+                    <td>
+                      <button class="btn btn-sm btn-dark" data-bs-toggle="modal" data-bs-target="#viewReportModal">
+                        عرض
+                      </button>
+                    </td>
+                  </tr>
+
+                  <tr data-title="بلاغ تم حله" data-user="أحمد علي" data-status="closed">
+                    <td>
+                      <span class="badge bg-danger-subtle text-danger">
+                        <i class="bi bi-flag-fill ms-1"></i>
+                        بلاغ
+                      </span>
+                    </td>
+                    <td>
+                      <strong>بلاغ على مستخدم</strong>
+                      <p class="text-muted small mb-0">تمت مراجعة البلاغ وإغلاقه</p>
+                    </td>
+                    <td>أحمد علي</td>
+                    <td>2026-05-05</td>
+                    <td><span class="badge bg-success-subtle text-success">مغلق</span></td>
+                    <td>
+                      <button class="btn btn-sm btn-dark" data-bs-toggle="modal" data-bs-target="#viewReportModal">
+                        عرض
+                      </button>
+                    </td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Send Message Modal -->
+  <div class="modal fade" id="sendMessageModal" tabindex="-1" aria-labelledby="sendMessageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 rounded-4">
+
+        <div class="modal-header border-0">
+          <div>
+            <h5 class="modal-title fw-bold" id="sendMessageModalLabel">إرسال رسالة عامة</h5>
+            <p class="text-muted small mb-0">اكتب رسالة مختصرة وواضحة للمستخدمين</p>
+          </div>
+
+          <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body">
+          <p class="text-muted mb-0">
+            يمكنك استخدام النموذج الموجود في الصفحة لإرسال الرسالة. هذا المودل فقط لفتح إجراء سريع لاحقًا.
+          </p>
+        </div>
+
+        <div class="modal-footer border-0">
+          <button type="button" class="btn btn-light fw-bold" data-bs-dismiss="modal">إغلاق</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- View Report Modal -->
+  <div class="modal fade" id="viewReportModal" tabindex="-1" aria-labelledby="viewReportModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 rounded-4">
+
+        <div class="modal-header border-0">
+          <div>
+            <h5 class="modal-title fw-bold" id="viewReportModalLabel">تفاصيل الرسالة</h5>
+            <p class="text-muted small mb-0">مراجعة البلاغ أو رسالة الدعم</p>
+          </div>
+
+          <button type="button" class="btn-close m-0" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body">
+          <div class="bg-light rounded-4 p-3 mb-3">
+            <h6 class="fw-bold mb-2">بلاغ على خدمة غير مناسبة</h6>
+            <p class="text-muted mb-0">
+              المستخدم أرسل بلاغًا لأن الخدمة تحتوي على وصف غير واضح ويحتاج الأمر إلى مراجعة من الإدارة.
+            </p>
+          </div>
+
+          <label class="form-label fw-bold">رد الإدارة</label>
+          <textarea class="form-control bg-light border-0" rows="4" placeholder="اكتب الرد هنا..."></textarea>
+        </div>
+
+        <div class="modal-footer border-0">
+          <button type="button" class="btn btn-light fw-bold" data-bs-dismiss="modal">إلغاء</button>
+          <button type="button" class="btn btn-primary-custom fw-bold">إرسال الرد</button>
+          <button type="button" class="btn btn-success fw-bold">إغلاق البلاغ</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- JS Files -->
+  <script src="../js/bootstrap.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const broadcastForm = document.getElementById("broadcastForm");
+      const sentMessagesList = document.getElementById("sentMessagesList");
+
+      const messagesSearch = document.getElementById("messagesSearch");
+      const messagesStatusFilter = document.getElementById("messagesStatusFilter");
+      const messagesTableBody = document.getElementById("messagesTableBody");
+
+      broadcastForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const title = document.getElementById("messageTitle").value.trim();
+        const target = document.getElementById("messageTarget").value;
+        const type = document.getElementById("messageType").value;
+        const body = document.getElementById("messageBody").value.trim();
+
+        if (!title || !body) {
+          alert("يرجى إدخال عنوان الرسالة ونص الرسالة");
+          return;
+        }
+
+        let targetText = "جميع المستخدمين";
+        if (target === "students") {
+          targetText = "الطلاب فقط";
+        } else if (target === "providers") {
+          targetText = "مزودي الخدمات فقط";
+        }
+
+        let typeText = "إشعار";
+        let typeClass = "bg-blue-soft text-blue";
+
+        if (type === "warning") {
+          typeText = "تنبيه";
+          typeClass = "bg-orange-soft text-orange";
+        } else if (type === "maintenance") {
+          typeText = "صيانة";
+          typeClass = "bg-orange-soft text-orange";
+        }
+
+        const newMessage = `
+          <div class="list-group-item px-0 py-3">
+            <div class="d-flex justify-content-between gap-3">
+              <div>
+                <h6 class="fw-bold mb-1">${title}</h6>
+                <p class="text-muted mb-1 small">${body}</p>
+                <small class="text-muted">إلى: ${targetText}</small>
+              </div>
+              <span class="badge ${typeClass} h-100">${typeText}</span>
+            </div>
+          </div>
+        `;
+
+        sentMessagesList.insertAdjacentHTML("afterbegin", newMessage);
+        broadcastForm.reset();
+
+        alert("تم إرسال الرسالة بنجاح");
+      });
+
+      function filterMessages() {
+        const searchValue = messagesSearch.value.toLowerCase().trim();
+        const selectedStatus = messagesStatusFilter.value;
+        const rows = messagesTableBody.querySelectorAll("tr");
+
+        rows.forEach(function (row) {
+          const title = row.dataset.title.toLowerCase();
+          const user = row.dataset.user.toLowerCase();
+          const status = row.dataset.status;
+
+          const matchesSearch = title.includes(searchValue) || user.includes(searchValue);
+          const matchesStatus = selectedStatus === "all" || status === selectedStatus;
+
+          row.style.display = matchesSearch && matchesStatus ? "" : "none";
+        });
+      }
+
+      messagesSearch.addEventListener("input", filterMessages);
+      messagesStatusFilter.addEventListener("change", filterMessages);
+    });
+  </script>
+
+</body>
+
+</html>
