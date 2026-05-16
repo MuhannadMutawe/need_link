@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>طلب خدمة - NeedLink</title>
+<link rel="stylesheet" href="css\styles.css">
+<script src="js\app.js" defer></script>
+</head>
+<body>
+<nav class="nav">
+  <div class="container nav-inner">
+    <div class="logo">
+      <div class="logo-mark">N</div>
+      <div><span class="need">Need</span><span class="link">Link</span></div>
+    </div>
+    <div class="menu">
+      <a href="home.html">الرئيسية</a>
+      <a href="explore.html">استكشاف الخدمات</a>
+      <a href="request-service.html">طلب خدمة</a>
+      <a href="service-details.html">تفاصيل الخدمة</a>
+      <a href="messages.html">الرسائل</a>
+      <a href="profile.html">الملف الشخصي</a>
+      <a href="login.html">تسجيل الدخول</a>
+    </div>
+    <div class="actions">
+      <button class="btn-outline">دخول</button>
+      <button class="btn">ابدأ الآن</button>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <h1 class="page-title">طلب خدمة</h1>
+  <div class="split-feature">
+    <section class="panel" style="padding:28px">
+      <span class="badge badge-orange">نمط الطلبات الفورية</span>
+      <h2>انشر احتياجك كأنه إعلان مباشر</h2>
+      <p class="muted">هذه الصفحة لازم تشعر بأنها أسرع وأكثر مباشرة من صفحة استكشاف الخدمات.</p>
+      <div class="grid-2">
+        <div><label>عنوان الطلب</label><input placeholder="محتاج مصمم اليوم"></div>
+        <div><label>التصنيف</label><select><option>اختر التصنيف</option></select></div>
+      </div>
+      <div style="margin-top:14px"><label>وصف الطلب</label><textarea placeholder="اكتب التفاصيل المهمة فقط: المطلوب، الموعد، المتوقع"></textarea></div>
+      <div class="grid-2" style="margin-top:14px">
+        <div><label>الميزانية</label><input placeholder="$10 - $20"></div>
+        <div><label>الوقت المطلوب</label><select><option>اليوم</option><option>هذا الأسبوع</option><option>مرن</option></select></div>
+      </div>
+      <div style="margin-top:14px"><label>طريقة التواصل</label><select><option>محادثة داخل المنصة</option></select></div>
+      <div style="margin-top:18px;display:flex;gap:12px;flex-wrap:wrap">
+        <button class="btn">نشر الطلب</button>
+        <button class="btn-light">حفظ كمسودة</button>
+      </div>
+    </section>
+
+    <aside class="panel" style="padding:28px">
+      <h2>معاينة فورية</h2>
+      <div class="feed-card">
+        <span class="badge badge-orange">عاجل</span>
+        <h3>محتاج مصمم واجهات اليوم</h3>
+        <p class="muted">إعادة تصميم شاشتين لتطبيق طلابي بشكل سريع.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <span class="badge badge-blue">تصميم</span>
+          <span class="badge badge-orange">ميزانية $15</span>
+          <span class="badge badge-blue">اليوم</span>
+        </div>
+      </div>
+      <div class="task"><strong>نصيحة:</strong><p class="muted">كلما كان الطلب أقصر وأوضح، كانت الردود أسرع.</p></div>
+      <div class="task"><strong>نصيحة:</strong><p class="muted">اذكر الوقت والميزانية لتقليل الرسائل غير الضرورية.</p></div>
+    </aside>
+  </div>
+</div>
+
+<footer class="footer"><div class="container">نسخة عربية كاملة لواجهات NeedLink — بسيطة، أوضح، وأقرب لفكرة المشروع الأصلية.</div></footer>
+</body>
+</html>

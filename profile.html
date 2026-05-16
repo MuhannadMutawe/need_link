@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>الملف الشخصي - NeedLink</title>
+<link rel="stylesheet" href="css\styles.css">
+<script src="js\app.js" defer></script>
+</head>
+<body>
+<nav class="nav">
+  <div class="container nav-inner">
+    <div class="logo">
+      <div class="logo-mark">N</div>
+      <div><span class="need">Need</span><span class="link">Link</span></div>
+    </div>
+    <div class="menu">
+      <a href="home.html">الرئيسية</a>
+      <a href="explore.html">استكشاف الخدمات</a>
+      <a href="request-service.html">طلب خدمة</a>
+      <a href="service-details.html">تفاصيل الخدمة</a>
+      <a href="messages.html">الرسائل</a>
+      <a href="profile.html">الملف الشخصي</a>
+      <a href="login.html">تسجيل الدخول</a>
+    </div>
+    <div class="actions">
+      <button class="btn-outline">دخول</button>
+      <button class="btn">ابدأ الآن</button>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <h1 class="page-title">الملف الشخصي</h1>
+  <div class="profile-shell" style="padding:20px">
+    <div class="profile-top">
+      <div style="display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;align-items:center">
+        <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+          <div class="logo-mark" style="width:94px;height:94px;border-radius:28px;background:linear-gradient(135deg,var(--orange),var(--orange2));font-size:34px">س</div>
+          <div>
+            <h2 style="margin:0">سارة حسن</h2>
+            <p style="margin:8px 0 0;color:#dbeafe">مصممة جرافيك • 32 مهمة مكتملة • التقييم 4.8</p>
+          </div>
+        </div>
+        <button class="btn-light">تعديل الملف
+        </button>
+        
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-card"><h3>4.8</h3><p class="muted">التقييم</p></div>
+      <div class="stat-card"><h3>32</h3><p class="muted">الأعمال</p></div>
+      <div class="stat-card"><h3>12س</h3><p class="muted">متوسط الرد</p></div>
+      <div class="stat-card"><h3>24</h3><p class="muted">المراجعات</p></div>
+    </div>
+
+    <div class="grid-2 section">
+      <section class="panel" style="padding:24px">
+        <h2>نبذة</h2>
+        <p class="muted">أركز على التصميم العملي والمرتب للمشاريع الطلابية والشركات الناشئة والأعمال الصغيرة.</p>
+        <h3>المهارات</h3>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <span class="badge badge-blue">UI</span>
+          <span class="badge badge-orange">Branding</span>
+          <span class="badge badge-blue">Presentations</span>
+        </div>
+      </section>
+      <section class="panel" style="padding:24px">
+        <h2>خدماتي</h2>
+        <div class="mini">تصميم لوجو احترافي</div>
+        <div class="mini">تصميم هوية بصرية بسيطة</div>
+        <div class="mini">تنسيق عروض تقديمية</div>
+      </section>
+    </div>
+
+    <section class="panel" style="padding:24px">
+      <h2>التقييمات</h2>
+      <div class="review">شغل مرتب وتعامل ممتاز.</div>
+      <div class="review">التسليم سريع والنتيجة جميلة.</div>
+      <div class="review">واضحة جدًا في التواصل والتعديل.</div>
+    </section>
+  </div>
+</div>
+
+<footer class="footer"><div class="container">نسخة عربية كاملة لواجهات NeedLink — بسيطة، أوضح، وأقرب لفكرة المشروع الأصلية.</div></footer>
+<div id="editModal" class="modal-overlay">
+  <div class="modal-content">
+    <form class="modal-body">
+    <div class="modal-header">
+      <h2>تعديل البيانات الشخصية</h2>
+      <button class="close-btn" id="closeModal">&times;</button>
+    </div>
+    <form class="modal-body">
+      <div class="form-group">
+        <label>الاسم بالكامل</label>
+        <input type="text" value="سارة حسن" class="form-input">
+      </div>
+      <div class="form-group">
+        <label>المسمى الوظيفي</label>
+        <input type="text" value="مصممة جرافيك" class="form-input">
+      </div>
+      <div class="form-group">
+        <label>النبذة التعريفية</label>
+        <textarea class="form-input" rows="3">أركز على التصميم العملي للمشاريع الطلابية والشركات الناشئة.</textarea>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn-outline" id="cancelBtn">إلغاء</button>
+        <button type="submit" class="btn">حفظ التغييرات</button>
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+</html>

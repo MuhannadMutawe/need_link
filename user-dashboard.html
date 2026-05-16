@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>لوحة المستخدم - NeedLink</title>
+<link rel="stylesheet" href="css\styles.css">
+<script src="js\app.js" defer></script>
+</head>
+<body>
+<nav class="nav">
+  <div class="container nav-inner">
+    <div class="logo">
+      <div class="logo-mark">N</div>
+      <div><span class="need">Need</span><span class="link">Link</span></div>
+    </div>
+    <div class="menu">
+      <a href="home.html">الرئيسية</a>
+      <a href="explore.html">استكشاف الخدمات</a>
+      <a href="request-service.html">طلب خدمة</a>
+      <a href="service-details.html">تفاصيل الخدمة</a>
+      <a href="messages.html">الرسائل</a>
+      <a href="profile.html">الملف الشخصي</a>
+      <a href="login.html">تسجيل الدخول</a>
+    </div>
+    <div class="actions">
+      <button class="btn-outline">دخول</button>
+      <button class="btn">ابدأ الآن</button>
+    </div>
+  </div>
+</nav>
+
+<div class="container dashboard">
+  <aside class="sidebar">
+    <div class="sidebar-top">
+      <h2 style="margin:0">لوحة المستخدم</h2>
+      <p style="margin:8px 0 0;color:#dbeafe">متابعة الطلبات والرسائل</p>
+    </div>
+    <div class="side-links">
+      <a class="side-link active">الرئيسية</a>
+      <a class="side-link">طلباتي</a>
+      <a class="side-link">الخدمات المحفوظة</a>
+      <a class="side-link">الرسائل</a>
+      <a class="side-link">الإعدادات</a>
+    </div>
+  </aside>
+
+  <main>
+    <h1 class="page-title" style="margin-top:0">لوحة المستخدم</h1>
+    <div class="grid-4">
+      <div class="stat-card"><span class="badge badge-orange">الطلبات</span><h2>12</h2><p class="muted">طلباتك الحالية</p></div>
+      <div class="stat-card"><span class="badge badge-blue">المحفوظات</span><h2>8</h2><p class="muted">خدمات محفوظة</p></div>
+      <div class="stat-card"><span class="badge badge-orange">الرسائل</span><h2>24</h2><p class="muted">رسائل غير مقروءة</p></div>
+      <div class="stat-card"><span class="badge badge-blue">المكتمل</span><h2>6</h2><p class="muted">مهام منجزة</p></div>
+    </div>
+
+    <div class="section">
+      <div class="table-card" style="padding:24px">
+        <h2 style="margin-top:0">آخر النشاطات</h2>
+        <table class="table">
+          <thead><tr><th>العنصر</th><th>المسؤول</th><th>التاريخ</th><th>الحالة</th></tr></thead>
+          <tbody>
+            <tr><td>محتاج مصمم واجهات</td><td>أحمد ن.</td><td>اليوم</td><td><span class="badge badge-orange">قيد الانتظار</span></td></tr>
+            <tr><td>طلب ترجمة</td><td>يوسف م.</td><td>أمس</td><td><span class="badge badge-green">تم المطابقة</span></td></tr>
+            <tr><td>مساعدة Laravel</td><td>سارة ك.</td><td>قبل يومين</td><td><span class="badge badge-blue">قيد التنفيذ</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<footer class="footer"><div class="container">نسخة عربية كاملة لواجهات NeedLink — بسيطة، أوضح، وأقرب لفكرة المشروع الأصلية.</div></footer>
+</body>
+</html>

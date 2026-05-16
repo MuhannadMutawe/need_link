@@ -1,0 +1,156 @@
+:root {
+    --primary-blue: #1e4eb8;
+    --light-bg: #f4f7fe;
+    --text-dark: #333;
+    --input-bg: #f8fafc;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--light-bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background-color: white;
+    width: 900px;
+    max-width: 95%;
+    height: 550px;
+    border-radius: 30px;
+    display: flex;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+/* القسم الأيسر - فورم الدخول */
+.login-section {
+    flex: 1;
+    padding: 40px 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.title {
+    font-size: 28px;
+    color: var(--text-dark);
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #444;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background-color: var(--input-bg);
+    outline: none;
+    transition: 0.3s;
+    text-align: right;
+}
+
+.form-group input:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(30, 78, 184, 0.1);
+}
+
+.login-btn {
+    background-color: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 10px;
+    transition: 0.3s;
+}
+
+.login-btn:hover {
+    background-color: #163a8a;
+}
+
+.footer-links {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.footer-links a {
+    color: var(--primary-blue);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* القسم الأيمن الأزرق */
+.brand-section {
+    flex: 1;
+    background: linear-gradient(135deg, #1e4eb8 0%, #3b82f6 100%);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    text-align: center;
+    position: relative;
+}
+
+.badge {
+    background: rgba(255,255,255,0.2);
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 12px;
+    margin-bottom: 20px;
+}
+
+.brand-section h2 {
+    font-size: 32px;
+    margin-bottom: 15px;
+}
+
+.brand-section p {
+    font-size: 16px;
+    opacity: 0.9;
+    line-height: 1.6;
+}
+
+/* زخرفة الدائرة */
+.brand-section::after {
+    content: '';
+    position: absolute;
+    bottom: -50px;
+    left: -50px;
+    width: 200px;
+    height: 200px;
+    border: 2px solid rgba(255,255,255,0.1);
+    border-radius: 50%;
+}
+
+/* التوافق مع الشاشات الصغيرة */
+@media (max-width: 768px) {
+    .brand-section { display: none; }
+    .container { width: 450px; height: auto; padding: 20px 0; }
+}
