@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.addEventListener("DOMContentLoaded", function () {
   let currentStep = 1;
-  const totalSteps = 4;
+  const totalSteps = 3;
 
   const panels = document.querySelectorAll(".step-panel");
   const indicators = document.querySelectorAll(".progress-step");
@@ -72,20 +72,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const providerModeBox = document.getElementById("providerModeBox");
 
-  /**
-   * الحصول على القيمة المحددة من مجموعة خيارات radiogroup
-   * @param {string} name - اسم مجموعة radio buttons
-   * @returns {string} القيمة المحددة أو نص فارغ
-   */
   function getCheckedValue(name) {
     const checked = document.querySelector(`input[name="${name}"]:checked`);
     return checked ? checked.value : "";
   }
 
-  /**
-   * إظihkan الخطوة المحددة وإخفاء الخطوات الأخرى
-   * @param {number} step - رقم الخطوة المراد إظهارها
-   */
   function showStep(step) {
     panels.forEach(panel => {
       panel.classList.remove("active");
@@ -110,48 +101,8 @@ document.addEventListener("DOMContentLoaded", function () {
       submitBtn.style.display = "none";
     }
 
-    if (step === 4) {
+    if (step === 3) {
       fillSummary();
-    }
-  }
-
-  function toggleProviderMode() {
-    const role = getCheckedValue("user_role");
-
-    if (role === "provider" || role === "both") {
-      providerModeBox.style.display = "block";
-    } else {
-      providerModeBox.style.display = "none";
-
-      document.querySelectorAll('input[name="provider_mode"]').forEach(input => {
-        input.checked = false;
-      });
-    }
-  }
-
-  function mapUserRole(value) {
-    switch (value) {
-      case "needer":
-        return "محتاج خدمة";
-      case "provider":
-        return "مقدم خدمة";
-      case "both":
-        return "الاثنان";
-      default:
-        return "-";
-    }
-  }
-
-  function mapProviderMode(value) {
-    switch (value) {
-      case "quick_help":
-        return "مساعدة سريعة";
-      case "freelancer":
-        return "مستقل";
-      case "both":
-        return "الاثنان";
-      default:
-        return "-";
     }
   }
 
@@ -167,29 +118,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.getElementById("summary_phone").textContent =
       document.getElementById("phone").value.trim() || "-";
-
-    const role = getCheckedValue("user_role");
-    const providerMode = getCheckedValue("provider_mode");
-
-    document.getElementById("summary_user_role").textContent = mapUserRole(role);
-
-    const row = document.getElementById("summary_provider_mode_row");
-    const value = document.getElementById("summary_provider_mode");
-
-    if (role === "provider" || role === "both") {
-      row.style.display = "flex";
-      value.textContent = mapProviderMode(providerMode);
-    } else {
-      row.style.display = "none";
-      value.textContent = "-";
-    }
   }
 
-  /**
-   * التحقق من صحة بيانات الخطوة الحالية في نموذج التسجيل
-   * @param {number} step - رقم الخطوة الحالية (1-4)
-   * @returns {boolean} true إذا كانت البيانات صالحة
-   */
   function validateStep(step) {
     // الخطوة 1: التحقق من البيانات الشخصية الأساسية
     if (step === 1) {
@@ -221,24 +151,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-    // الخطوة 2: التحقق من اختيار الدور
+    // الخطوة 2 : التحقق من كلمة المرور
     if (step === 2) {
-      const role = getCheckedValue("user_role");
-
-      if (!role) {
-        alert("يرجى اختيار دورك داخل النظام");
-        return false;
-      }
-
-      // التحقق من نوع التقديم إذا كان مقدم خدمة
-      if ((role === "provider" || role === "both") && !getCheckedValue("provider_mode")) {
-        alert("يرجى اختيار نوع التقديم");
-        return false;
-      }
-    }
-
-    // الخطوة 3: التحقق من كلمة المرور
-    if (step === 3) {
       const password = document.getElementById("password").value;
       const confirm = document.getElementById("password_confirmation").value;
 
@@ -261,9 +175,6 @@ document.addEventListener("DOMContentLoaded", function () {
     return true;
   }
 
-  document.querySelectorAll('input[name="user_role"]').forEach(input => {
-    input.addEventListener("change", toggleProviderMode);
-  });
 
   nextBtn.addEventListener("click", function () {
     if (!validateStep(currentStep)) return;
@@ -281,10 +192,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
-    alert("هان يا شباب راح تجي مهمة الباك اند في انشاءالحساب و اضافته لداتا بيز");
-  });
+
 
   showStep(currentStep);
 });
@@ -305,29 +213,6 @@ document.querySelectorAll(".toggle-password").forEach(function (button) {
       icon.classList.remove("bi-eye-slash");
       icon.classList.add("bi-eye");
     }
-  });
-});
-
-// Landing Page
-document.addEventListener("DOMContentLoaded", function () {
-  const revealElements = document.querySelectorAll(".reveal");
-
-  const observer = new IntersectionObserver(
-    function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("show");
-          observer.unobserve(entry.target);
-        }
-      });
-    },
-    {
-      threshold: 0.15,
-    }
-  );
-
-  revealElements.forEach(function (element) {
-    observer.observe(element);
   });
 });
 

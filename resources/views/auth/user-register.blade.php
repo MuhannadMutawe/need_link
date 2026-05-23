@@ -1,25 +1,16 @@
-<!doctype html>
-<html lang="ar" dir="rtl">
-
-<head>
-  <meta charset="UTF-8">
-  <link rel="icon" href="../assets/logo/logo.png" type="image/png" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>إنشاء حساب - NeedLink</title>
-  <!-- Link of Bootstrap CSS Framework -->
-  <link rel="stylesheet" href="../css/bootstrap.css">
-  <!-- Main Link for CSS Style -->
-  <link rel="stylesheet" href="../css/styles.css">
-  <!-- Auth Css File -->
-  <link rel="stylesheet" href="../css/auth.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-</head>
-
-<body>
+@extends('layout.master')
+@section('title')
+  NeedLink - انشاء حساب
+@endsection
+@section('css')
+  <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
+@endsection
+@section('content')
   <nav class="nav">
     <div class="container nav-inner">
       <div class="logo">
-        <img src="../assets/logo/logo.png" alt="" style="width: 45px; border-radius: 50%;">
+        <img src="{{ asset('assets/logo/logo.png') }}" alt="" style="width: 45px; border-radius: 50%;">
         <div><span class="need">Need</span><span class="link">Link</span></div>
       </div>
     </div>
@@ -39,17 +30,12 @@
               </div>
 
               <div class="brand-step">
-                <strong>2) كيف ستستخدم النظام؟</strong>
-                <span>محتاج خدمة أو مقدم خدمة أو الاثنين</span>
-              </div>
-
-              <div class="brand-step">
-                <strong>3) تأمين الحساب</strong>
+                <strong>2) تأمين الحساب</strong>
                 <span>كلمة المرور وتأكيدها</span>
               </div>
 
               <div class="brand-step">
-                <strong>4) مراجعة نهائية</strong>
+                <strong>3) مراجعة نهائية</strong>
                 <span>تأكد من كل البيانات قبل إنشاء الحساب</span>
               </div>
             </section>
@@ -64,127 +50,58 @@
                 <div class="progress-steps">
                   <div class="progress-step active" data-indicator="1">الخطوة الأولى</div>
                   <div class="progress-step" data-indicator="2">الخطوة الثانية</div>
-                  <div class="progress-step" data-indicator="3">الخطوة الثالثة</div>
                   <div class="progress-step" data-indicator="4">المراجعة</div>
                 </div>
 
                 <div class="progress">
-                  <div class="progress-bar" id="progressBar" style="width:25%"></div>
+                  <div class="progress-bar" id="progressBar" style="width:33%"></div>
                 </div>
               </div>
 
-              <form id="registerForm">
+              <form id="registerForm" action="{{ route('auth.register.submit') }}" method="post">
                 <!-- Step 1 -->
                 <div class="step-panel active" data-step="1">
                   <div class="row g-3">
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <div class="col-md-6">
                       <label class="form-label" for="name">الاسم الكامل</label>
-                      <input type="text" class="form-control" id="name" placeholder="أدخل الاسم الكامل">
+                      <input type="text" class="form-control" name="name" id="name" placeholder="أدخل الاسم الكامل">
                     </div>
 
                     <div class="col-md-6">
                       <label class="form-label" for="username">اسم المستخدم</label>
-                      <input type="text" class="form-control" id="username" placeholder="مثال: abu_alhassan">
+                      <input type="text" class="form-control" name="username" id="username"
+                        placeholder="مثال: abu_alhassan">
                     </div>
 
                     <div class="col-md-6">
                       <label class="form-label" for="email">البريد الإلكتروني</label>
-                      <input type="email" class="form-control" id="email" placeholder="name@example.com">
+                      <input type="email" class="form-control" name="email" id="email" placeholder="name@example.com">
                     </div>
 
                     <div class="col-md-6">
                       <label class="form-label" for="phone">رقم الجوال</label>
-                      <input type="text" class="form-control" id="phone" placeholder="0590000000">
+                      <input type="text" class="form-control" name="phone" id="phone" placeholder="0590000000">
                     </div>
                   </div>
 
                   <div class="text-center mt-4">
-                    <a href="{{ route('auth.login') }}" class="text-decoration-underline text-primary"><i class="bi bi-person"
-                        style="font-size: 20px;"></i>أنا أملك حساب بالفعل</a>
+                    <a href="{{ route('auth.login') }}" class="text-decoration-underline text-primary"><i
+                        class="bi bi-person" style="font-size: 20px;"></i>أنا أملك حساب بالفعل</a>
                   </div>
 
                 </div>
+
 
                 <!-- Step 2 -->
                 <div class="step-panel" data-step="2">
-                  <label class="form-label mb-3">كيف ستستخدم NeedLink؟</label>
-
-                  <div class="row g-3">
-                    <div class="col-md-4">
-                      <input class="role-radio d-none" type="radio" name="user_role" id="role_needer" value="needer">
-                      <label class="role-card" for="role_needer">
-                        <div class="role-icon"><i class="bi bi-search-heart"></i></div>
-                        <div class="role-title">محتاج خدمة</div>
-                        <div class="role-desc">أدخل للبحث عن شخص يلبي احتياجي</div>
-                      </label>
-                    </div>
-
-                    <div class="col-md-4">
-                      <input class="role-radio d-none" type="radio" name="user_role" id="role_provider"
-                        value="provider">
-                      <label class="role-card orange" for="role_provider">
-                        <div class="role-icon"><i class="bi bi-briefcase-fill"></i></div>
-                        <div class="role-title">مقدم خدمة</div>
-                        <div class="role-desc">أعرض خدماتي وأساعد الآخرين</div>
-                      </label>
-                    </div>
-
-                    <div class="col-md-4">
-                      <input class="role-radio d-none" type="radio" name="user_role" id="role_both" value="both">
-                      <label class="role-card" for="role_both">
-                        <div class="role-icon"><i class="bi bi-arrow-left-right"></i></div>
-                        <div class="role-title">الاثنان</div>
-                        <div class="role-desc">أحتاج وأقدم خدمات أيضًا</div>
-                      </label>
-                    </div>
-                  </div>
-
-                  <div class="provider-box mt-4" id="providerModeBox">
-                    <label class="form-label mb-3">نوع التقديم كمقدم خدمة</label>
-
-                    <div class="row g-3">
-                      <div class="col-md-4">
-                        <input class="provider-radio d-none" type="radio" name="provider_mode" id="mode_quick_help"
-                          value="quick_help">
-                        <label class="role-card orange" for="mode_quick_help">
-                          <div class="role-icon"><i class="bi bi-lightning-charge-fill"></i></div>
-                          <div class="role-title">مساعدة سريعة</div>
-                          <div class="role-desc">طلبات سريعة وفورية</div>
-                        </label>
-                      </div>
-
-                      <div class="col-md-4">
-                        <input class="provider-radio d-none" type="radio" name="provider_mode" id="mode_freelancer"
-                          value="freelancer">
-                        <label class="role-card" for="mode_freelancer">
-                          <div class="role-icon"><i class="bi bi-laptop-fill"></i></div>
-                          <div class="role-title">مستقل</div>
-                          <div class="role-desc">خدمات احترافية كاملة</div>
-                        </label>
-                      </div>
-
-                      <div class="col-md-4">
-                        <input class="provider-radio d-none" type="radio" name="provider_mode" id="mode_both"
-                          value="both">
-                        <label class="role-card orange" for="mode_both">
-                          <div class="role-icon"><i class="bi bi-diagram-3-fill"></i></div>
-                          <div class="role-title">الاثنان</div>
-                          <div class="role-desc">سريع واحترافي معًا</div>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Step 3 -->
-                <div class="step-panel" data-step="3">
                   <div class="row g-3">
 
                     <div class="col-md-6">
                       <label class="form-label" for="password">كلمة المرور</label>
 
                       <div class="input-group">
-                        <input type="password" class="form-control" id="password">
+                        <input type="password" class="form-control" name="password" id="password">
 
                         <button class="btn btn-outline-secondary toggle-password" type="button" data-target="password">
                           <i class="bi bi-eye"></i>
@@ -196,7 +113,8 @@
                       <label class="form-label" for="password_confirmation">تأكيد كلمة المرور</label>
 
                       <div class="input-group">
-                        <input type="password" class="form-control" id="password_confirmation">
+                        <input type="password" class="form-control" name="password_confirmation"
+                          id="password_confirmation">
 
                         <button class="btn btn-outline-secondary toggle-password" type="button"
                           data-target="password_confirmation">
@@ -209,7 +127,7 @@
                 </div>
 
                 <!-- Step 4 -->
-                <div class="step-panel" data-step="4">
+                <div class="step-panel" data-step="3">
                   <div class="summary-box">
                     <div class="summary-row">
                       <span class="summary-label">الاسم</span>
@@ -230,16 +148,6 @@
                       <span class="summary-label">رقم الجوال</span>
                       <span class="summary-value" id="summary_phone">-</span>
                     </div>
-
-                    <div class="summary-row">
-                      <span class="summary-label">الدور داخل النظام</span>
-                      <span class="summary-value" id="summary_user_role">-</span>
-                    </div>
-
-                    <div class="summary-row" id="summary_provider_mode_row" style="display:none;">
-                      <span class="summary-label">نوع التقديم</span>
-                      <span class="summary-value" id="summary_provider_mode">-</span>
-                    </div>
                   </div>
                 </div>
 
@@ -256,13 +164,39 @@
       </div>
     </div>
   </main>
+@endsection
+@section('script')
+  <script>
+    $(document).ready(function () {
+      $('#registerForm').on('submit', function (e) {
+        e.preventDefault();
+        let formData = new FormData(this);
+        $.ajax({
+          url: '{{ route('auth.register.submit') }}', // we can write $(this).attr('action') alse :)
+          method: 'post',
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function (response) {
+            if (response.success) {
+              window.location.href = response.redirect; // هان علشان نعمل اعادة توجيه لصفحة لرابط المناسب لما تأتي النتيجة صحيحة من السيرفر
+            } else {
+              console.log('error');
+              notyf.error(response.message);
+            }
+          },
+          error: function (xhr) {
+            $('.error-text').remove();
+            if (xhr.status === 422) {
+              let errors = xhr.responseJSON.errors;
+              $.each(errors, function (key, value) {
+                notyf.error(value[0]); // في حال كان هناك اخطاء عند محاولة تسجيل الدخول سوف يخرج رسالة الخطا للمستخدم طبعا الرسائل تخزن ك array
+              });
+            }
+          },
+        });
+      })
+    });
 
-  <footer class="footer text-center">
-    <div class="container">&copy; NeedLink 2026 Development Tool</div>
-  </footer>
-  <!-- JS Files -->
-  <script src="../js/app.js" defer></script>
-  <script src="../js/bootstrap.js"></script>
-</body>
-
-</html>
+  </script>
+@endsection

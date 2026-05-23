@@ -25,7 +25,7 @@
 
                 <div class="form-group">
                     <label>كلمة المرور</label>
-                    <input type="password" name="password" placeholder="ادخل كلمة المرور" >
+                    <input type="password" name="password" placeholder="ادخل كلمة المرور">
                 </div>
 
                 <button type="submit" class="login-btn">دخول</button>
@@ -48,7 +48,7 @@
                 e.preventDefault();
                 let formData = new FormData(this);
                 $.ajax({
-                    url: {{ route('auth.login.submit') }}, // we can write $(this).attr('action') alse :)
+                    url: '{{ route('auth.login.submit') }}', // we can write $(this).attr('action') alse :)
                     method: 'post',
                     data: formData,
                     processData: false,
@@ -56,12 +56,15 @@
                     success: function (response) {
                         if (response.success) {
                             window.location.href = response.redirect; // هان علشان نعمل اعادة توجيه لصفحة لرابط المناسب لما تأتي النتيجة صحيحة من السيرفر
+                        } else {
+                            notyf.error(response.message);
+
                         }
                     },
                     error: function (xhr) {
                         $('.error-text').remove();
                         if (xhr.status === 422) {
-                            let errors = xhr.responseJSON.errors; 
+                            let errors = xhr.responseJSON.errors;
                             $.each(errors, function (key, value) {
                                 notyf.error(value[0]); // في حال كان هناك اخطاء عند محاولة تسجيل الدخول سوف يخرج رسالة الخطا للمستخدم طبعا الرسائل تخزن ك array
                             });
