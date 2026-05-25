@@ -4,46 +4,11 @@ namespace App\Http\Controllers\auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Auth;
 use Hash;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Throwable;
 
-class AuthController extends Controller
+class RegisterController extends Controller
 {
-    public function indexlogin()
-    {
-        return view('auth.user-login');
-    }
-
-    public function login(Request $request)
-    {
-        $data = $request->validate(
-            [
-                'email' => 'required|email|exists:users,email',
-                'password' => 'required|string'
-            ],
-            [
-                'email.required' => 'حقل الايميل مطلوب',
-                'email.email' => 'يجب أن تكون صيغة الايميل صحيحة',
-                'email.exists' => 'الايميل المدخل غير متوفر',
-                'password.required' => 'أدخل كلمة المرور',
-                'password.string' => 'يجب أن تكون كلمة المرور ارقاما و حروف و علامات خاصة'
-            ]
-        );
-        try {
-            if (\Illuminate\Support\Facades\Auth::attempt($data)) {
-                return response()->json(['success' => true, 'redirect' => route('dashbaord.main')]);
-            } else {
-                return response()->json(['errors' => ['status' => ['كلمة المرور او الايميل غير صحيح']]] , 422);
-            }
-        } catch (Throwable $e) {
-            return response()->json(['errors' => ['status' => ['حدث خطأ غير متوقع يرجى المحاولة لاحقا']]] , 422);
-        }
-
-    }
-
     public function indexRegister()
     {
         return view('auth.user-register');
@@ -57,7 +22,7 @@ class AuthController extends Controller
                 'username' => 'required|unique:users,username|max:50|min:8',
                 'email' => 'required|email|unique:users,email',
                 'phone' => 'required|string|max:11|unique:users,phone',
-                'password' => 'required|string|min:7|max:20|confirmed',
+                'password' => ['required', 'confirmed', \Illuminate\Validation\Rules\Password::defaults()],
             ],
             [
                 'name.required' => 'أدخل اسمك كاملا',
@@ -75,28 +40,25 @@ class AuthController extends Controller
                 'phone.max' => 'يجب أن لا يتجاوز رقم الهاتف ال10 أرقام',
                 'phone.unique' => 'رقم الهانف هذا مستخدم مسبقا يرجى اضافة رقم هاتف اخر',
                 'password.required' => 'أدخل كلمة المرور',
-                'password.min' => 'يجب أن لا تقل كلمة المرور عن 7 ارقام او احرف لضمان قوتها',
-                'password.max' => 'يجب أن لا تتجاوز كلمتك ال 20 حرفا او رقما',
                 'password.confirmed' => 'يجب أن تكون كلمة المرور و تأكيدها متطابقة'
             ]
         );
-        // dd($request->all());
         try {
-            DB::beginTransaction();
             $user = User::create([
                 'name' => $request->name,
                 'username' => $request->username,
                 'email' => $request->email,
                 'phone' => $request->phone,
-                'password' => Hash::make($request->password),
+                'password' => $request->password,
             ]);
-            DB::commit();
-        } catch (Throwable $e) {
-            DB::rollBack();
-            return response()->json(['errors' => ['status' => [$e->getMessage()]]] , 422);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Registration Error: ' . $e->getMessage());
+            return response()->json(['errors' => ['status' => ['حدث خطأ أثناء إنشاء الحساب، يرجى المحاولة لاحقاً']]] , 422);
         }
 
-        return response()->json(['success' => true , 'redirect' => route('auth.login')]);
+        // automatically login user 
+        \Illuminate\Support\Facades\Auth::login($user);
+        return response()->json(['success' => true , 'redirect' => route('dashboard.main')]);
 
     }
 }

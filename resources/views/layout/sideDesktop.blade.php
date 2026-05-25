@@ -14,11 +14,11 @@
 
         <div class="p-3">
           <div class="list-group admin-side-links">
-            <a href="{{ route('dashbaord.main') }}" class="list-group-item list-group-item-action active">
+            <a href="{{ route('dashboard.main') }}" class="list-group-item list-group-item-action active">
               <i class="bi bi-grid-1x2-fill ms-2"></i> الرئيسية
             </a>
 
-            <a href="{{ route('dashbaord.requests.index') }}" class="list-group-item list-group-item-action">
+            <a href="{{ route('dashboard.requests.index') }}" class="list-group-item list-group-item-action">
               <i class="bi bi-people-fill ms-2"></i> طلباتي
             </a>
 

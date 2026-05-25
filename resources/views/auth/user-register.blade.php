@@ -50,7 +50,7 @@
                 <div class="progress-steps">
                   <div class="progress-step active" data-indicator="1">الخطوة الأولى</div>
                   <div class="progress-step" data-indicator="2">الخطوة الثانية</div>
-                  <div class="progress-step" data-indicator="4">المراجعة</div>
+                  <div class="progress-step" data-indicator="3">المراجعة</div>
                 </div>
 
                 <div class="progress">
@@ -126,7 +126,7 @@
                   </div>
                 </div>
 
-                <!-- Step 4 -->
+                <!-- Step 3: Review -->
                 <div class="step-panel" data-step="3">
                   <div class="summary-box">
                     <div class="summary-row">
@@ -172,31 +172,30 @@
         e.preventDefault();
         let formData = new FormData(this);
         $.ajax({
-          url: '{{ route('auth.register.submit') }}', // we can write $(this).attr('action') alse :)
-          method: 'post',
+          url: $(this).attr('action'),
+          method: 'POST',
           data: formData,
           processData: false,
           contentType: false,
           success: function (response) {
             if (response.success) {
-              window.location.href = response.redirect; // هان علشان نعمل اعادة توجيه لصفحة لرابط المناسب لما تأتي النتيجة صحيحة من السيرفر
+              window.location.href = response.redirect;
             } else {
-              console.log('error');
-              notyf.error(response.message);
+              notyf.error(response.message || 'حدث خطأ غير متوقع');
             }
           },
           error: function (xhr) {
-            $('.error-text').remove();
-            if (xhr.status === 422) {
+            if (xhr.status === 422 && xhr.responseJSON && xhr.responseJSON.errors) {
               let errors = xhr.responseJSON.errors;
               $.each(errors, function (key, value) {
-                notyf.error(value[0]); // في حال كان هناك اخطاء عند محاولة تسجيل الدخول سوف يخرج رسالة الخطا للمستخدم طبعا الرسائل تخزن ك array
+                notyf.error(value[0]);
               });
+            } else {
+              notyf.error('حدث خطأ غير متوقع، يرجى المحاولة لاحقاً');
             }
           },
         });
-      })
+      });
     });
-
   </script>
 @endsection
