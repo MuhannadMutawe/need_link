@@ -22,7 +22,7 @@
               <i class="bi bi-people-fill ms-2"></i> طلباتي
             </a>
 
-            <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+            <a href="{{ route('offers.user', auth()->id()) }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
               <span><i class="bi bi-person-check-fill ms-2"></i>عروضي</span>
             </a>
 

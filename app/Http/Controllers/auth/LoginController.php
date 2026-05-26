@@ -28,7 +28,13 @@ class LoginController extends Controller
         try {
             if (\Illuminate\Support\Facades\Auth::attempt($data)) {
                 $request->session()->regenerate();
-                return response()->json(['success' => true, 'redirect' => route('dashboard.main')]);
+                if (request()->expectsJson()) {
+                    return response()->json([
+                        'success' => true,
+                        'user_id' => auth()->id(),
+                        'redirect' => route('dashboard.main'),
+                    ]);
+                }
             } else {
                 return response()->json(['errors' => ['status' => ['كلمة المرور او الايميل غير صحيح']]] , 422);
             }

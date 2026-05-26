@@ -15,7 +15,7 @@ return new class extends Migration
 
             $table->text('message');
             $table->decimal('proposed_price', 12, 2);
-            $table->char('currency_code', 3);
+            $table->char('currency_code', 3)->default('USD');
 
             $table->integer('estimated_time');
             $table->enum('time_unit', ['hours', 'days', 'weeks']);

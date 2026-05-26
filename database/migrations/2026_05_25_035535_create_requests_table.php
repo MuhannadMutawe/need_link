@@ -25,11 +25,11 @@ return new class extends Migration
             $table->char('currency_code', 3)->default('USD');
             
             // Visibility
-            $table->timestamp('published_at')->nullable();
+            $table->timestamp('published_at')->useCurrent();
             $table->timestamp('expires_at')->nullable();
             
             // Lifecycle
-            $table->enum('status', ['draft', 'open', 'assigned', 'completed', 'cancelled', 'closed'])->default('draft');
+            $table->enum('status', ['draft', 'open', 'assigned', 'completed', 'cancelled', 'closed'])->default('open');
             
             // Metrics
             $table->unsignedInteger('applicant_count')->default(0);
