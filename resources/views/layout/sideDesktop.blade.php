@@ -46,6 +46,12 @@
             <a href="#" class="list-group-item list-group-item-action">
               <i class="bi bi-gear-fill ms-2"></i> الإعدادات
             </a>
+            
+            <hr class="text-white-50 my-3">
+            
+            <a href="{{ route('dashboard.categories.index') }}" class="list-group-item list-group-item-action text-warning fw-bold">
+              <i class="bi bi-shield-lock-fill ms-2"></i> لوحة الإدارة
+            </a>
           </div>
         </div>
       </aside>

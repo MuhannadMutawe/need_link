@@ -14,9 +14,12 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::all();
-        return response()->json($categories);
-        // not implemented yet !
-        // return view('dashboard.admin.categories.index', compact('categories'));
+
+        if (request()->expectsJson()) {
+            return response()->json($categories);
+        }
+
+        return view('dashboard.admin.categories', compact('categories'));
     }
 
     /**
@@ -45,12 +48,41 @@ class CategoryController extends Controller
     }
 
     /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Category $category)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
+            'icon' => 'nullable|string',
+        ], [
+            'name.required' => 'اسم الفئة مطلوب',
+            'name.unique' => 'اسم الفئة موجود مسبقاً'
+        ]);
+
+        $category->update($validated);
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => 'تم تحديث الفئة بنجاح',
+                'category' => $category
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'تم تحديث الفئة بنجاح');
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy(Category $category)
     {
         $category->delete();
-        return response()->json(["ok"=>"true"]);
-        // return redirect()->back()->with('success', 'تم حذف الفئة بنجاح');
+
+        if (request()->expectsJson()) {
+            return response()->json(["ok"=>"true"]);
+        }
+        
+        return redirect()->back()->with('success', 'تم حذف الفئة بنجاح');
     }
 }

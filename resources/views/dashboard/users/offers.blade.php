@@ -1,112 +1,153 @@
 @extends('layout.dash')
 @section('content')
-<div style="padding: 20px; width: 80%; margin: 0 auto; text-align: center;">
-    <h2>Create Offer</h2>
-    <form action="{{ route('dashboard.offers.store') }}" method="POST">
-        @csrf
-        <div>
-            <label>Request:</label>
-            <select name="request_id" class="request-select" required>
-                <option value="">-- Select Request --</option>
-            </select>
+<div class="container" style="padding: 20px;">
+
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
         </div>
-        <div>
-            <label>Message:</label>
-            <textarea name="message" required></textarea>
+    @endif
+    
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
         </div>
-        <div>
-            <label>Proposed Price:</label>
-            <input type="number" step="0.01" name="proposed_price" required>
+    @endif
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h3>Create Offer</h3>
         </div>
-        <div>
-            <label>Currency Code:</label>
-            <input type="text" name="currency_code" maxlength="3" placeholder="e.g. USD">
+        <div class="card-body">
+            <form action="{{ route('dashboard.offers.store') }}" method="POST">
+                @csrf
+                <div class="mb-3">
+                    <label class="form-label">Request:</label>
+                    <select name="request_id" class="form-select request-select" required>
+                        <option value="">-- Select Request --</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Message:</label>
+                    <textarea name="message" class="form-control" rows="3" required></textarea>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Proposed Price:</label>
+                        <input type="number" step="0.01" name="proposed_price" class="form-control" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Currency Code:</label>
+                        <input type="text" name="currency_code" maxlength="3" class="form-control" placeholder="e.g. USD">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Estimated Time:</label>
+                        <input type="number" name="estimated_time" min="1" class="form-control">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Time Unit:</label>
+                        <select name="time_unit" class="form-select">
+                            <option value="hours">Hours</option>
+                            <option value="days">Days</option>
+                            <option value="weeks">Weeks</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Expires At (optional):</label>
+                    <input type="datetime-local" name="expires_at" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary">Create Offer</button>
+            </form>
         </div>
-        <div>
-            <label>Estimated Time:</label>
-            <input type="number" name="estimated_time" min="1" >
-        </div>
-        <div>
-            <label>Time Unit:</label>
-            <select name="time_unit">
-                <option value="hours">Hours</option>
-                <option value="days">Days</option>
-                <option value="weeks">Weeks</option>
-            </select>
-        </div>
-        <div>
-            <label>Expires At:</label>
-            <input type="datetime-local" name="expires_at">
-        </div>
-        <button type="submit">Create Offer</button>
-    </form>
+    </div>
 
     <hr>
 
-    <h2>My Offers</h2>
+    <h3 class="mb-4">My Offers</h3>
     @if(isset($offers) && $offers->count() > 0)
-        @foreach($offers as $offer)
-            <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
-                <h3>Offer #{{ $offer->id }}</h3>
-                <p>Request: {{ $offer->serviceRequest ? $offer->serviceRequest->title : 'N/A' }}</p>
-                <p>User: {{ $offer->user ? $offer->user->first_name . ' ' . $offer->user->last_name : 'N/A' }}</p>
-                <p>Message: {{ $offer->message }}</p>
-                <p>Proposed Price: {{ $offer->proposed_price }} {{ $offer->currency_code }}</p>
-                <p>Estimated Time: {{ $offer->estimated_time }} {{ $offer->time_unit }}</p>
-                <p>Expires At: {{ $offer->expires_at }}</p>
-                <p>Status: {{ $offer->status }}</p>
+        <div class="row">
+            @foreach($offers as $offer)
+                <div class="col-12 mb-4">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Offer #{{ $offer->id }}</h5>
+                            <span class="badge bg-{{ $offer->status === 'accepted' ? 'success' : ($offer->status === 'rejected' ? 'danger' : 'secondary') }}">{{ ucfirst($offer->status) }}</span>
+                        </div>
+                        <div class="card-body">
+                            <p class="mb-2"><strong>Request:</strong> {{ $offer->serviceRequest ? $offer->serviceRequest->title : 'N/A' }}</p>
+                            <p class="mb-2"><strong>User:</strong> {{ $offer->user ? $offer->user->name : 'N/A' }}</p>
+                            <p class="mb-2"><strong>Message:</strong> {{ $offer->message }}</p>
+                            <p class="mb-2"><strong>Proposed Price:</strong> {{ $offer->proposed_price }} {{ $offer->currency_code }}</p>
+                            <p class="mb-2"><strong>Estimated Time:</strong> {{ $offer->estimated_time }} {{ $offer->time_unit }}</p>
+                            <p class="mb-2"><strong>Expires At:</strong> {{ $offer->expires_at }}</p>
 
-                <h4>Update</h4>
-                <form action="{{ route('dashboard.offers.update', $offer->id) }}" method="POST">
-                    @csrf
-                    @method('PUT')
-                    <div>
-                        <label>Request:</label>
-                        <select name="request_id" class="request-select" data-selected="{{ $offer->request_id }}" required>
-                            <option value="">-- Select Request --</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label>Message:</label>
-                        <textarea name="message" required>{{ $offer->message }}</textarea>
-                    </div>
-                    <div>
-                        <label>Proposed Price:</label>
-                        <input type="number" step="0.01" name="proposed_price" value="{{ $offer->proposed_price }}" required>
-                    </div>
-                    <div>
-                        <label>Currency Code:</label>
-                        <input type="text" name="currency_code" maxlength="3" value="{{ $offer->currency_code }}" required>
-                    </div>
-                    <div>
-                        <label>Estimated Time:</label>
-                        <input type="number" name="estimated_time" min="1" value="{{ $offer->estimated_time }}" required>
-                    </div>
-                    <div>
-                        <label>Time Unit:</label>
-                        <select name="time_unit" required>
-                            <option value="hours" {{ $offer->time_unit == 'hours' ? 'selected' : '' }}>Hours</option>
-                            <option value="days" {{ $offer->time_unit == 'days' ? 'selected' : '' }}>Days</option>
-                            <option value="weeks" {{ $offer->time_unit == 'weeks' ? 'selected' : '' }}>Weeks</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label>Expires At:</label>
-                        <input type="datetime-local" name="expires_at" value="{{ $offer->expires_at ? \Carbon\Carbon::parse($offer->expires_at)->format('Y-m-d\TH:i') : '' }}">
-                    </div>
-                    <button type="submit">Update</button>
-                </form>
+                            <hr>
 
-                <h4>Delete</h4>
-                <form action="{{ route('dashboard.offers.destroy', $offer->id) }}" method="POST" onsubmit="return confirm('Are you sure?');">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit">Delete</button>
-                </form>
-            </div>
-        @endforeach
+                            <h5 class="mt-3">Update Offer</h5>
+                            <form action="{{ route('dashboard.offers.update', $offer->id) }}" method="POST">
+                                @csrf
+                                @method('PUT')
+                                <div class="mb-3">
+                                    <label class="form-label">Request:</label>
+                                    <select name="request_id" class="form-select request-select" data-selected="{{ $offer->request_id }}" required>
+                                        <option value="">-- Select Request --</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Message:</label>
+                                    <textarea name="message" class="form-control" rows="3" required>{{ $offer->message }}</textarea>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Proposed Price:</label>
+                                        <input type="number" step="0.01" name="proposed_price" class="form-control" value="{{ $offer->proposed_price }}" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Currency Code:</label>
+                                        <input type="text" name="currency_code" maxlength="3" class="form-control" value="{{ $offer->currency_code }}" required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Estimated Time:</label>
+                                        <input type="number" name="estimated_time" min="1" class="form-control" value="{{ $offer->estimated_time }}" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Time Unit:</label>
+                                        <select name="time_unit" class="form-select" required>
+                                            <option value="hours" {{ $offer->time_unit == 'hours' ? 'selected' : '' }}>Hours</option>
+                                            <option value="days" {{ $offer->time_unit == 'days' ? 'selected' : '' }}>Days</option>
+                                            <option value="weeks" {{ $offer->time_unit == 'weeks' ? 'selected' : '' }}>Weeks</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Expires At:</label>
+                                    <input type="datetime-local" name="expires_at" class="form-control" value="{{ $offer->expires_at ? \Carbon\Carbon::parse($offer->expires_at)->format('Y-m-d\TH:i') : '' }}">
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <button type="submit" class="btn btn-warning">Update</button>
+                            </form>
+                                    <form action="{{ route('dashboard.offers.destroy', $offer->id) }}" method="POST" onsubmit="return confirm('Are you sure?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
     @else
-        <p>No offers found.</p>
+        <div class="alert alert-info">No offers found.</div>
     @endif
 </div>
 

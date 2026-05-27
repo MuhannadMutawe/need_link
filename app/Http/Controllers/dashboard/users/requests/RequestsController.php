@@ -34,6 +34,21 @@ class RequestsController extends Controller implements HasMiddleware
     }
 
     /**
+     * Display the specified request along with its offers.
+     */
+    public function show(ServiceRequest $serviceRequest)
+    {
+        $serviceRequest->load(['user', 'categories', 'offers.user']);
+
+        if (request()->expectsJson()) {
+            return response()->json($serviceRequest);
+        }
+
+        return view('dashboard.users.request_show', compact('serviceRequest'));
+    }
+
+
+    /**
      * Store a newly created request.
      */
     public function store(Request $request)

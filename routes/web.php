@@ -34,6 +34,7 @@ Route::prefix('dashboard')->name('dashboard.')->group(function () {
     // User Requests Routes
     Route::prefix('requests')->name('requests.')->controller(RequestsController::class)->group(function () {
         Route::get('/', 'index')->name('index');
+        Route::get('{serviceRequest}', 'show')->name('show');
         Route::post('/', 'store')->name('store');
         Route::put('{serviceRequest}', 'update')->name('update');
         Route::delete('{serviceRequest}', 'destroy')->name('destroy');
@@ -43,6 +44,7 @@ Route::prefix('dashboard')->name('dashboard.')->group(function () {
     Route::prefix('categories')->name('categories.')->controller(CategoryController::class)->group(function () {
         Route::get('/', 'index')->name('index');
         Route::post('/', 'store')->name('store');
+        Route::put('{category}', 'update')->name('update');
         Route::delete('{category}', 'destroy')->name('destroy');
     });
 
