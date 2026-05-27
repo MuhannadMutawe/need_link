@@ -2,7 +2,7 @@
 @section('content')
 <div style="padding: 20px; width: 80%; margin: 0 auto; text-align: center;">
     <h2>Create Offer</h2>
-    <form action="{{ route('offers.store') }}" method="POST">
+    <form action="{{ route('dashboard.offers.store') }}" method="POST">
         @csrf
         <div>
             <label>Request:</label>
@@ -57,7 +57,7 @@
                 <p>Status: {{ $offer->status }}</p>
 
                 <h4>Update</h4>
-                <form action="{{ route('offers.update', $offer->id) }}" method="POST">
+                <form action="{{ route('dashboard.offers.update', $offer->id) }}" method="POST">
                     @csrf
                     @method('PUT')
                     <div>
@@ -98,7 +98,7 @@
                 </form>
 
                 <h4>Delete</h4>
-                <form action="{{ route('offers.destroy', $offer->id) }}" method="POST" onsubmit="return confirm('Are you sure?');">
+                <form action="{{ route('dashboard.offers.destroy', $offer->id) }}" method="POST" onsubmit="return confirm('Are you sure?');">
                     @csrf
                     @method('DELETE')
                     <button type="submit">Delete</button>

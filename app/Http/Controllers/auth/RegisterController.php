@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
-    public function indexRegister()
+    public function index()
     {
         return view('auth.user-register');
     }

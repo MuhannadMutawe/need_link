@@ -26,10 +26,16 @@ class OffersController extends Controller
     }
 
     /**
-     * Display a listing of all offers for a specific user.
+     * Display a listing of all offers for the authenticated user.
      */
-    public function userOffers(User $user)
+    public function myOffers()
     {
+        $user = auth()->user();
+        // Fallback for when auth is not fully configured yet
+        if (!$user) {
+            $user = User::first(); 
+        }
+
         $offers = $user->offers()->with(['serviceRequest', 'user'])->latest()->get();
 
         if (request()->expectsJson()) {

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
-    public function indexlogin()
+    public function index()
     {
         return view('auth.user-login');
     }
