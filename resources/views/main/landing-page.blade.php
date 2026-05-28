@@ -6,44 +6,6 @@
   <link rel="stylesheet" href="{{ asset('css/landing-page.css') }}">
 @endsection
 @section('content')
-    <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top py-3">
-    <div class="container">
-
-      <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
-        <img src="{{ asset('assets/logo/logo.png') }}" class="logo-img" alt="NeedLink Logo">
-        <span class="fs-4 fw-black">
-          <span class="text-orange">Need</span><span class="text-blue">Link</span>
-        </span>
-      </a>
-
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
-        aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div class="collapse navbar-collapse" id="mainNavbar">
-        <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-lg-3">
-          <li class="nav-item">
-            <a class="nav-link fw-bold" href="#services">الخدمات</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link fw-bold" href="#how">كيف يعمل؟</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link fw-bold" href="#roles">المستخدمون</a>
-          </li>
-        </ul>
-
-        <div class="d-flex gap-2">
-          <a href="{{ route('auth.login') }}" class="btn btn-light fw-bold px-4">دخول</a>
-          <a href="{{ route('auth.register') }}" class="btn btn-primary-custom fw-bold px-4">ابدأ الآن</a>
-        </div>
-      </div>
-
-    </div>
-  </nav>
-
   <!-- Hero -->
   <header class="hero-section py-5">
     <div class="container py-lg-5">

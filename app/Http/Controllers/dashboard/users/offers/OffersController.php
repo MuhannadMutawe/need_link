@@ -31,7 +31,7 @@ class OffersController extends Controller
     public function myOffers()
     {
         $user = auth()->user();
-        // Fallback for when auth is not fully configured yet
+        // TODO: Fallback for when auth is not fully configured yet
         if (!$user) {
             $user = User::first(); 
         }

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 // Main Routes
 Route::prefix('main')->name('main.')->controller(MainController::class)->group(function () {
     Route::get('landing-page', 'index')->name('showLanding');
+    Route::get('requests', 'browseRequests')->name('requests');
 });
 
 // Auth Routes

@@ -23,6 +23,8 @@
 
 <body>
 
+    @include('layout.navbar')
+    
     @yield('content')
 
 

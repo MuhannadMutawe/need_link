@@ -11,4 +11,15 @@ class MainController extends Controller
     {
         return view('main.landing-page');
     }
+
+    public function browseRequests()
+    {
+        $requests = \App\Models\ServiceRequest::with(['user', 'categories'])
+            ->where('expires_at', '>', now())
+            ->where('status', 'open')
+            ->latest()
+            ->paginate(3);
+
+        return view('main.requests', compact('requests'));
+    }
 }

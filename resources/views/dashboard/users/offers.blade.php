@@ -94,12 +94,7 @@
                             <form action="{{ route('dashboard.offers.update', $offer->id) }}" method="POST">
                                 @csrf
                                 @method('PUT')
-                                <div class="mb-3">
-                                    <label class="form-label">Request:</label>
-                                    <select name="request_id" class="form-select request-select" data-selected="{{ $offer->request_id }}" required>
-                                        <option value="">-- Select Request --</option>
-                                    </select>
-                                </div>
+                                <input type="hidden" name="request_id" value="{{ $offer->request_id }}">
                                 <div class="mb-3">
                                     <label class="form-label">Message:</label>
                                     <textarea name="message" class="form-control" rows="3" required>{{ $offer->message }}</textarea>
