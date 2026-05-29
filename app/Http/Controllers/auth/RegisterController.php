@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Hash;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RegisterController extends Controller
 {
@@ -56,9 +57,13 @@ class RegisterController extends Controller
             return response()->json(['errors' => ['status' => ['حدث خطأ أثناء إنشاء الحساب، يرجى المحاولة لاحقاً']]] , 422);
         }
 
-        // automatically login user 
-        \Illuminate\Support\Facades\Auth::login($user);
-        return response()->json(['success' => true , 'redirect' => route('dashboard.main')]);
+        Auth::login($user);
+        request()->session()->regenerate();
+
+        return response()->json([
+            'success' => true,
+            'redirect' => route('dashboard.main'),
+        ]);
 
     }
 }

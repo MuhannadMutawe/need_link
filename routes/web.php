@@ -26,6 +26,9 @@ Route::prefix('auth')->name('auth.')->group(function () {
         Route::get('register', 'index')->name('register');
         Route::post('register', 'register')->name('register.submit');
     });
+
+    Route::POST('logout', [LoginController::class, 'logout'])
+        ->name('logout');
 });
 
 // Dashboard Routes

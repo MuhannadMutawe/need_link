@@ -132,7 +132,8 @@
 
     <div class="d-flex gap-2 align-items-center">
       @auth
-        <form action="{{ route('auth.login') }}" method="GET" class="d-inline">
+        <form action="{{ route('auth.logout') }}" method="POST" class="d-inline">
+          @csrf
           <button type="submit" class="btn btn-outline-danger">تسجيل الخروج</button>
         </form>
       @else
@@ -200,7 +201,7 @@
     {{-- Auth buttons pinned to bottom --}}
     <div class="mob-auth-area mt-auto">
       @auth
-        <form action="{{ route('auth.login') }}" method="GET">
+        <form action="{{ route('auth.logout') }}" method="POST">
           <button type="submit" class="btn btn-outline-danger w-100">تسجيل الخروج</button>
         </form>
       @else

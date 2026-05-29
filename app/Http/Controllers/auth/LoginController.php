@@ -4,6 +4,7 @@ namespace App\Http\Controllers\auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -43,5 +44,20 @@ class LoginController extends Controller
             return response()->json(['errors' => ['status' => ['حدث خطأ غير متوقع يرجى المحاولة لاحقا']]] , 422);
         }
 
+    }
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+    
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'redirect' => route('auth.user-login'),
+            ]);
+        }
+        return view('auth.user-login');
     }
 }
