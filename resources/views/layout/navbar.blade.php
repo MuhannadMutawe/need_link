@@ -145,9 +145,9 @@
 
 </nav>
 
-{{-- ═══════════════════════════════════════════════
-     Mobile Offcanvas Sidebar  (merged from sideMobile.blade.php)
-════════════════════════════════════════════════ --}}
+{{-- 
+     Mobile Offcanvas Sidebar
+ --}}
 <div class="offcanvas offcanvas-end" tabindex="-1" id="mobileSidebar"
   aria-labelledby="mobileSidebarLabel">
 

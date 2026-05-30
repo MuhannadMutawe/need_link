@@ -20,15 +20,13 @@ Route::prefix('auth')->name('auth.')->group(function () {
     Route::controller(LoginController::class)->group(function () {
         Route::get('login', 'index')->name('login');
         Route::post('login', 'login')->name('login.submit');
+        Route::post('logout', 'logout')->name('logout');
     });
 
     Route::controller(RegisterController::class)->group(function () {
         Route::get('register', 'index')->name('register');
         Route::post('register', 'register')->name('register.submit');
     });
-
-    Route::POST('logout', [LoginController::class, 'logout'])
-        ->name('logout');
 });
 
 // Dashboard Routes
@@ -38,6 +36,7 @@ Route::prefix('dashboard')->name('dashboard.')->group(function () {
     // User Requests Routes
     Route::prefix('requests')->name('requests.')->controller(RequestsController::class)->group(function () {
         Route::get('/', 'index')->name('index');
+        Route::get('create', 'create')->name('create');
         Route::get('{serviceRequest}', 'show')->name('show');
         Route::post('/', 'store')->name('store');
         Route::put('{serviceRequest}', 'update')->name('update');

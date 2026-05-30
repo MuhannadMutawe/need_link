@@ -7,14 +7,6 @@
   <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
 @endsection
 @section('content')
-  <nav class="nav">
-    <div class="container nav-inner">
-      <div class="logo">
-        <img src="{{ asset('assets/logo/logo.png') }}" alt="" style="width: 45px; border-radius: 50%;">
-        <div><span class="need">Need</span><span class="link">Link</span></div>
-      </div>
-    </div>
-  </nav>
   <main class="register-page">
     <div class="container">
       <div class="register-shell">

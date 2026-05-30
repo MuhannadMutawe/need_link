@@ -18,19 +18,24 @@ class RequestsController extends Controller implements HasMiddleware
         ];
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $userId = auth()->id() ?? 1; // used coelcing (?? 1) for testing purposes only
-        $requests = ServiceRequest::with(['user', 'categories'])
-            ->where('user_id', $userId)
-            ->latest()
-            ->get();
+        $sortField = $request->query('sort', 'created_at');
+        $sortField = in_array($sortField, ['created_at', 'updated_at']) ? $sortField : 'created_at';
 
-        if (request()->expectsJson()) {
+        $requests = ServiceRequest::with(['categories'])
+            ->withCount('offers')
+            ->where('user_id', auth()->id())
+            ->orderByDesc($sortField)
+            ->paginate(3);
+
+        $categories = \App\Models\Category::all();
+
+        if ($request->expectsJson()) {
             return response()->json($requests);
         }
 
-        return view('dashboard.users.requests', compact('requests'));
+        return view('dashboard.users.requests', compact('requests', 'sortField', 'categories'));
     }
 
     /**
@@ -72,7 +77,7 @@ class RequestsController extends Controller implements HasMiddleware
 
         $validated['user_id'] = auth()->id();
 
-        $validated['status'] = $request->input('status', 'draft');
+        $validated['status'] = $request->input('status', 'open');
         if ($validated['status'] === 'draft') { $validated['published_at'] = null; }
 
         $serviceRequest = ServiceRequest::create($validated);
@@ -132,5 +137,13 @@ class RequestsController extends Controller implements HasMiddleware
         }
 
         return redirect()->back()->with('success', 'تم حذف الطلب بنجاح');
+    }
+    /**
+     * Displays a form to create new request.
+     */
+    public function create()
+    {
+        $categories = \App\Models\Category::all();
+        return view("dashboard.users.requests_create", compact("categories"));
     }
 }

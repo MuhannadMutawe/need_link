@@ -25,7 +25,7 @@ return new class extends Migration
             $table->char('currency_code', 3)->default('USD');
             
             // Visibility
-            $table->timestamp('published_at')->useCurrent();
+            $table->timestamp('published_at')->nullable()->useCurrent();
             $table->timestamp('expires_at')->nullable();
             
             // Lifecycle
