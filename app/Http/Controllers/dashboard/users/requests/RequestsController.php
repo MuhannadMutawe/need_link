@@ -130,13 +130,28 @@ class RequestsController extends Controller implements HasMiddleware
      */
     public function destroy(ServiceRequest $serviceRequest)
     {
+        if ($serviceRequest->user_id !== auth()->id()) {
+            if (request()->expectsJson()) {
+                return response()->json(['message' => 'غير مصرح'], 403);
+            }
+            abort(403, 'Unauthorized action.');
+        }
+
+        if (in_array($serviceRequest->status, ['completed', 'closed'])) {
+            if (request()->expectsJson()) {
+                return response()->json(['message' => 'لا يمكن إلغاء طلب مكتمل أو مغلق'], 400);
+            }
+            return redirect()->back()->with('error', 'لا يمكن إلغاء طلب مكتمل أو مغلق');
+        }
+
+        $serviceRequest->update(['status' => 'cancelled']);
         $serviceRequest->delete();
 
         if (request()->expectsJson()) {
-            return response()->json(['message' => 'تم حذف الطلب بنجاح']);
+            return response()->json(['message' => 'تم إلغاء الطلب بنجاح']);
         }
 
-        return redirect()->back()->with('success', 'تم حذف الطلب بنجاح');
+        return redirect()->back()->with('success', 'تم إلغاء الطلب بنجاح');
     }
     /**
      * Displays a form to create new request.

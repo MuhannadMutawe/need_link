@@ -124,12 +124,12 @@
                             <div class="card-body p-3 text-end" style="background-color: #fff; position: relative; z-index: 2;">
                                 <div class="d-flex flex-wrap justify-content-end gap-2">
                                     @foreach($req->categories->take(2) as $cat)
-                                        <span class="badge" style="background-color: #eef2ff; color: #4f46e5; border-radius: 8px; padding: 6px 14px; font-weight: 600; font-size: 0.85rem;">
-                                            {{ $cat->name }}
+                                        <span class="badge" style="background: linear-gradient(135deg, #6366f1, #4f46e5); color: #fff; border-radius: 8px; padding: 6px 14px; font-weight: 600; font-size: 0.85rem; box-shadow: 0 2px 4px rgba(79, 70, 229, 0.2);">
+                                            <i class="bi bi-tag-fill ms-1" style="font-size: 0.75rem; opacity: 0.8;"></i>{{ $cat->name }}
                                         </span>
                                     @endforeach
                                     @if($req->categories->count() > 2)
-                                        <span class="badge" style="background-color: #f1f5f9; color: #475569; border-radius: 8px; padding: 6px 12px; font-weight: 500; font-size: 0.85rem;">
+                                        <span class="badge bg-light text-secondary border" style="border-radius: 8px; padding: 6px 12px; font-weight: 600; font-size: 0.85rem;">
                                             +{{ $req->categories->count() - 2 }}
                                         </span>
                                     @endif
@@ -143,7 +143,24 @@
                                     <i class="bi bi-people"></i> {{ $req->offers_count }} عروض
                                 </span>
                                 {{-- Pricing Type --}}
-                                <span class="badge" style="background-color: #f1f5f9; color: #475569; border-radius: 8px; padding: 5px 10px; font-weight: 500; font-size: 0.78rem;">
+                                @php
+                                    $pricingBg = '#f1f5f9';
+                                    $pricingColor = '#475569';
+                                    $pricingIcon = 'bi-cash';
+                                    switch($req->pricing_type) {
+                                        case 'fixed': 
+                                            $pricingBg = '#dcfce7'; $pricingColor = '#15803d'; $pricingIcon = 'bi-cash-stack'; 
+                                            break;
+                                        case 'hourly': 
+                                            $pricingBg = '#e0e7ff'; $pricingColor = '#4338ca'; $pricingIcon = 'bi-clock-history'; 
+                                            break;
+                                        case 'negotiable': 
+                                            $pricingBg = '#fef3c7'; $pricingColor = '#b45309'; $pricingIcon = 'bi-chat-dots'; 
+                                            break;
+                                    }
+                                @endphp
+                                <span class="badge d-inline-flex align-items-center gap-1" style="background-color: {{ $pricingBg }}; color: {{ $pricingColor }}; border-radius: 8px; padding: 6px 12px; font-weight: 600; font-size: 0.85rem;">
+                                    <i class="bi {{ $pricingIcon }}"></i>
                                     @switch($req->pricing_type)
                                         @case('fixed')      ثابت @break
                                         @case('hourly')     بالساعة @break
