@@ -133,10 +133,21 @@ class OffersController extends Controller
             return response()->json(['error' => 'لا يمكن قبول عرض ليس قيد الانتظار'], 400);
         }
 
-        if (!in_array($serviceRequest->status, ['open', 'pending'])) {
-            return response()->json(['error' => 'حالة الطلب لا تسمح بقبول العروض'], 400);
+        if ($serviceRequest->status != 'open') {
+            $msg = 'حالة الطلب لا تسمح بقبول العروض';
+            if ($serviceRequest->status == 'assigned') {
+                $msg = 'لا يمكن قبول أكثر من عرض واحد للطلب الواحد';
+            }
+            return response()->json(['error' => $msg], 400);
         }
-
+        if ($offer->request_id !== $serviceRequest->id) {
+            return response()->json(['error' => 'العرض غير تابع لهذا الطلب'], 400);
+        }
+        \DB::transaction(function () use ($serviceRequest, $offer) {
+            $serviceRequest->update(['status' => 'assigned']);
+            $offer->update(['status' => 'accepted']);
+        });
+        $serviceRequest->update(['status'=>'assigned']);
         $offer->update(['status' => 'accepted']);
 
         if (request()->expectsJson()) {
@@ -155,9 +166,12 @@ class OffersController extends Controller
         }
 
         if ($offer->status != "pending") {
-            return response()->json(['error' => 'لا يمكن رفض عرض ليس قيد الانتظار'], 400);
+            return response()->json(['error' => 'هذا العرض غير متاح حاليا'], 400);
         }
-
+        
+        if ($offer->request_id !== $serviceRequest->id) {
+            return response()->json(['error' => 'العرض غير تابع لهذا الطلب'], 400);
+        }
         $offer->update(['status' => 'rejected']);
 
         if (request()->expectsJson()) {
@@ -178,8 +192,13 @@ class OffersController extends Controller
         if (!in_array($offer->status, ['accepted', 'rejected'])) {
             return response()->json(['error' => 'يمكن فقط إعادة تعيين العروض المقبولة أو المرفوضة'], 400);
         }
-
-        $offer->update(['status' => 'pending']);
+        if ($offer->request_id !== $serviceRequest->id) {
+            return response()->json(['error' => 'العرض غير تابع لهذا الطلب'], 400);
+        }
+        \DB::transaction(function () use ($serviceRequest, $offer) {
+            $serviceRequest->update(['status'=>'open']);
+            $offer->update(['status' => 'pending']);
+        });
 
         if (request()->expectsJson()) {
             return response()->json(['message' => 'تم إعادة العرض لقيد الانتظار', 'status' => 'pending']);
