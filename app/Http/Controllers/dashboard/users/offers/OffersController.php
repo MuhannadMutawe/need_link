@@ -85,13 +85,13 @@ class OffersController extends Controller
     public function update(Request $request, Offer $offer)
     {
         $validated = $request->validate([
-            'request_id'     => 'required|exists:requests,id',
+            'request_id'     => 'sometimes|exists:requests,id',
             'message'        => 'sometimes|string',
             'proposed_price' => 'sometimes|numeric|min:0',
-            'currency_code'  => 'nullable|string|size:3',
+            'currency_code'  => 'nullable|string|max:4',
             'estimated_time' => 'nullable|integer|min:1',
             'time_unit'      => 'nullable|in:hours,days,weeks',
-            'status'         => 'nullable|in:pending,accepted,rejected,withdrawn',
+            'status'         => 'nullable|in:pending,accepted,rejected,withdrawn,submitted,draft',
             'expires_at'     => 'nullable|date|after:now',
         ]);
 
@@ -119,5 +119,72 @@ class OffersController extends Controller
         }
 
         return redirect()->back()->with('success', 'تم حذف العرض بنجاح');
+    }
+    
+    public function accept(ServiceRequest $serviceRequest, Offer $offer)
+    {
+        $user = auth()->user() ?? \App\Models\User::first();
+
+        if ($serviceRequest->user_id != $user->id) {
+            return response()->json(['error' => 'غير مصرح لك باتخاذ هذا الإجراء'], 403);
+        }
+
+        if ($offer->status != "pending") {
+            return response()->json(['error' => 'لا يمكن قبول عرض ليس قيد الانتظار'], 400);
+        }
+
+        if (!in_array($serviceRequest->status, ['open', 'pending'])) {
+            return response()->json(['error' => 'حالة الطلب لا تسمح بقبول العروض'], 400);
+        }
+
+        $offer->update(['status' => 'accepted']);
+
+        if (request()->expectsJson()) {
+            return response()->json(['message' => 'تم قبول العرض بنجاح', 'status' => 'accepted']);
+        }
+
+        return redirect()->back()->with('success', 'تم قبول العرض بنجاح');
+    }
+
+    public function reject(ServiceRequest $serviceRequest, Offer $offer)
+    {
+        $user = auth()->user() ?? \App\Models\User::first();
+
+        if ($serviceRequest->user_id != $user->id) {
+            return response()->json(['error' => 'غير مصرح لك باتخاذ هذا الإجراء'], 403);
+        }
+
+        if ($offer->status != "pending") {
+            return response()->json(['error' => 'لا يمكن رفض عرض ليس قيد الانتظار'], 400);
+        }
+
+        $offer->update(['status' => 'rejected']);
+
+        if (request()->expectsJson()) {
+            return response()->json(['message' => 'تم رفض العرض', 'status' => 'rejected']);
+        }
+
+        return redirect()->back()->with('success', 'تم رفض العرض');
+    }
+
+    public function reset(ServiceRequest $serviceRequest, Offer $offer)
+    {
+        $user = auth()->user() ?? \App\Models\User::first();
+
+        if ($serviceRequest->user_id != $user->id) {
+            return response()->json(['error' => 'غير مصرح لك باتخاذ هذا الإجراء'], 403);
+        }
+
+        if (!in_array($offer->status, ['accepted', 'rejected'])) {
+            return response()->json(['error' => 'يمكن فقط إعادة تعيين العروض المقبولة أو المرفوضة'], 400);
+        }
+
+        $offer->update(['status' => 'pending']);
+
+        if (request()->expectsJson()) {
+            return response()->json(['message' => 'تم إعادة العرض لقيد الانتظار', 'status' => 'pending']);
+        }
+
+        return redirect()->back()->with('success', 'تم إعادة العرض لقيد الانتظار');
     }
 }

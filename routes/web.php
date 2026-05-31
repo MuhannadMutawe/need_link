@@ -59,4 +59,9 @@ Route::prefix('dashboard')->name('dashboard.')->group(function () {
         Route::put('{offer}', 'update')->name('update');
         Route::delete('{offer}', 'destroy')->name('destroy');
     });
+
+    // Accept, Reject, Reset Offers (POST)
+    Route::post('service-requests/{serviceRequest}/offers/{offer}/accept', [OffersController::class, 'accept'])->name('requests.offers.accept');
+    Route::post('service-requests/{serviceRequest}/offers/{offer}/reject', [OffersController::class, 'reject'])->name('requests.offers.reject');
+    Route::post('service-requests/{serviceRequest}/offers/{offer}/reset', [OffersController::class, 'reset'])->name('requests.offers.reset');
 });
