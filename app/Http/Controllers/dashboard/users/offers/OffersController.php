@@ -146,9 +146,20 @@ class OffersController extends Controller
         \DB::transaction(function () use ($serviceRequest, $offer) {
             $serviceRequest->update(['status' => 'assigned']);
             $offer->update(['status' => 'accepted']);
+            
+            \App\Models\Order::create([
+                'request_id' => $serviceRequest->id,
+                'offer_id' => $offer->id,
+                'client_id' => $serviceRequest->user_id,
+                'provider_id' => $offer->user_id,
+                'agreed_price' => $offer->proposed_price,
+                'currency_code' => $offer->currency_code ?? 'USD',
+                // For now, default to service type
+                'order_type' => 'service', 
+                'status' => 'in_progress',
+                'started_at' => now(),
+            ]);
         });
-        $serviceRequest->update(['status'=>'assigned']);
-        $offer->update(['status' => 'accepted']);
 
         if (request()->expectsJson()) {
             return response()->json(['message' => 'تم قبول العرض بنجاح', 'status' => 'accepted']);

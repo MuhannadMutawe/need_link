@@ -63,6 +63,7 @@ class RequestsController extends Controller implements HasMiddleware
             'categories.*' => 'exists:categories,id',
             'title'        => 'required|string|max:255',
             'description'  => 'required|string',
+            'image'        => 'nullable|image|max:5120',
             'pricing_type' => 'required|in:fixed,hourly,negotiable',
             'budget'       => 'nullable|numeric|min:0',
             'currency_code'=> 'nullable|string|size:3',
@@ -79,6 +80,10 @@ class RequestsController extends Controller implements HasMiddleware
 
         $validated['status'] = $request->input('status', 'open');
         if ($validated['status'] === 'draft') { $validated['published_at'] = null; }
+
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('request_images');
+        }
 
         $serviceRequest = ServiceRequest::create($validated);
         $serviceRequest->categories()->sync($validated['categories']);
@@ -103,12 +108,17 @@ class RequestsController extends Controller implements HasMiddleware
             'categories.*' => 'exists:categories,id',
             'title'        => 'sometimes|string|max:255',
             'description'  => 'sometimes|string',
+            'image'        => 'nullable|image|max:5120',
             'pricing_type' => 'sometimes|in:fixed,hourly,negotiable',
             'budget'       => 'nullable|numeric|min:0',
             'currency_code'=> 'nullable|string|size:3',
             'status'       => 'nullable|in:draft,open,assigned,completed,cancelled,closed',
             'expires_at'   => 'nullable|date|after:now',
         ]);
+
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('request_images');
+        }
 
         $serviceRequest->update($validated);
         if (isset($validated['categories'])) {

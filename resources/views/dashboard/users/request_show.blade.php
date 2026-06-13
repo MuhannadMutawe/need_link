@@ -24,9 +24,9 @@
     .request-details-card .card-header h5 { margin: 0; font-weight: 700; color: #1e293b; font-size: 1.1rem; }
     .details-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; padding: 20px; }
     .detail-item { display: flex; gap: 12px; }
-    .detail-icon { font-size: 1.3rem; color: #4f46e5; flex-shrink: 0; margin-top: 2px; }
-    .detail-content h6 { font-size: 0.78rem; color: #94a3b8; font-weight: 600; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .detail-content p { margin: 0; font-size: 0.95rem; color: #1e293b; font-weight: 600; }
+    .detail-icon { font-size: 1.1rem; color: #4f46e5; flex-shrink: 0; margin-top: 1px; }
+    .detail-content h6 { font-size: 0.75rem; color: #64748b; font-weight: 600; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .detail-content p { margin: 0; font-size: 0.9rem; color: #1e293b; font-weight: 600; }
     .badge-wrapper { display: flex; flex-wrap: wrap; gap: 6px; }
 
     /* ── Offer Field Cards (Modal) ── */
@@ -76,32 +76,51 @@
 
     /* ── Add Offer Btn ── */
     .btn-add-offer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-
-    width: fit-content;
-    max-width: 260px;
-    min-width: 180px;
-
-    padding: 18px 20px;
-
-    border-radius: 12px;
-    background: #4f46e5;
-    color: #fff;
-    border: none;
-
-    font-size: 0.97rem;
-    font-weight: 700;
-    line-height: 1.2;
-
-    cursor: pointer;
-
-    transition: background 0.15s, transform 0.15s;
-    margin-bottom: 24px;
-}
-    .btn-add-offer:hover { background: #4338ca; transform: translateY(-1px); color: #fff; }
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        width: 240px;
+        height: 65px;
+        border-radius: 35px;
+        background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%);
+        box-shadow: 0 10px 25px -4px rgba(79, 70, 229, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+        color: #fff;
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        font-size: 1.15rem;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        margin: 30px auto 50px auto;
+        position: relative;
+        overflow: hidden;
+    }
+    .btn-add-offer::before {
+        content: '';
+        position: absolute;
+        top: 0; left: -100%;
+        width: 50%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+        transform: skewX(-25deg);
+        transition: all 0.6s ease;
+    }
+    .btn-add-offer:hover::before {
+        left: 150%;
+    }
+    .btn-add-offer:hover { 
+        transform: translateY(-5px); 
+        box-shadow: 0 18px 35px -5px rgba(79, 70, 229, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.4); 
+        color: #fff; 
+        background: linear-gradient(135deg, #4f46e5 0%, #312e81 100%);
+    }
+    .btn-add-offer i {
+        font-size: 1.4rem;
+        transition: transform 0.3s ease;
+    }
+    .btn-add-offer:hover i {
+        transform: scale(1.2);
+    }
 
     /* ── Offer Tabs ── */
     .offers-tabs { display: flex; gap: 0; border-bottom: 1.5px solid #e0e6ed; margin-bottom: 20px; }
@@ -413,76 +432,72 @@
     {{-- Page Header --}}
     <div class="req-page-header pt-4 mb-4">
         <h4 dir="auto"><i class="bi bi-file-earmark-text-fill text-primary ms-2"></i>{{ $serviceRequest->title }}</h4>
-        <p>تصفّح تفاصيل الطلب وأضفِ عرضك الخاص</p>
     </div>
 
     {{-- Request Details Card --}}
     
-    <div class="request-details-card">
-        <div class="card-header">
-            <h5><i class="bi bi-info-circle-fill ms-2"></i>تفاصيل الطلب</h5>
-        </div>
-        <div class="request-description" style="padding: 24px; border-bottom: 1px solid #e0e6ed; background: #fff;">
-            <h6 style="font-size: 0.85rem; color: #94a3b8; font-weight: 700; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">
-                <i class="bi bi-file-text text-primary ms-1"></i> وصف الطلب
-            </h6>
-            <p dir="auto" style="font-size: 1rem; color: #334155; line-height: 1.8; margin: 0; white-space: pre-line;">{{ $serviceRequest->description }}</p>
-        </div>
-        <div class="details-grid">
-            <div class="detail-item">
-                <div class="detail-icon"><i class="bi bi-tag-fill"></i></div>
-                <div class="detail-content">
-                    <h6>نوع التسعير</h6>
-                    @php
-                        $pricingText  = ['fixed'=>'سعر ثابت','hourly'=>'بالساعة','negotiable'=>'قابل للتفاوض'];
-                        $pricingColor = ['fixed'=>'bg-success','hourly'=>'bg-info','negotiable'=>'bg-warning'];
-                    @endphp
-                    <span class="badge {{ $pricingColor[$serviceRequest->pricing_type] ?? 'bg-secondary' }} text-white">
+    <div class="mb-4">
+        <div class="d-flex flex-wrap gap-4 align-items-center mb-3">
+            <div class="d-flex align-items-center gap-2">
+                <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                    <i class="bi bi-person-fill fs-5"></i>
+                </div>
+                <div>
+                    <h6 class="mb-0 text-muted" style="font-size: 0.8rem;">صاحب الطلب</h6>
+                    <span class="fw-bold text-dark">{{ $serviceRequest->user->name ?? 'غير معروف' }}</span>
+                </div>
+            </div>
+            
+            <div class="d-flex gap-3 ms-auto bg-light rounded-pill px-3 py-2">
+                <div class="d-flex align-items-center gap-1 text-muted">
+                    <i class="bi bi-wallet2 text-primary"></i>
+                    <span class="fw-bold text-dark" style="font-size: 0.9rem;">
+                        @if($serviceRequest->budget)
+                            @php $currencySymbols = ['USD' => '$', 'EUR' => '€', 'JOD' => 'دينار', 'ILS' => '₪']; @endphp
+                            {{ number_format($serviceRequest->budget, 0) }} {{ $currencySymbols[$serviceRequest->currency_code] ?? $serviceRequest->currency_code }}
+                        @else
+                            غير محدد
+                        @endif
+                    </span>
+                </div>
+                
+                <div class="border-start ps-3 d-flex align-items-center gap-1 text-muted">
+                    <i class="bi bi-tag-fill text-primary"></i>
+                    <span class="fw-bold text-dark" style="font-size: 0.9rem;">
+                        @php
+                            $pricingText = ['fixed'=>'سعر ثابت', 'hourly'=>'بالساعة', 'negotiable'=>'قابل للتفاوض'];
+                        @endphp
                         {{ $pricingText[$serviceRequest->pricing_type] ?? $serviceRequest->pricing_type }}
                     </span>
                 </div>
             </div>
-            @php
-                $currencySymbols = ['USD' => '$', 'EUR' => '€', 'JOD' => 'دينار', 'ILS' => '₪'];
-            @endphp
-            <div class="detail-item">
-                <div class="detail-icon"><i class="bi bi-wallet2"></i></div>
-                <div class="detail-content">
-                    <h6>الميزانية</h6>
-                    @if($serviceRequest->budget)
-                        <p style="color:#4f46e5;"> {{ number_format($serviceRequest->budget, 0) }} {{ $currencySymbols[$serviceRequest->currency_code] ?? $serviceRequest->currency_code }}</p>
-                    @else
-                        <p class="text-muted">غير محدد</p>
-                    @endif
-                </div>
-            </div>
-            <div class="detail-item">
-                <div class="detail-icon"><i class="bi bi-lightning-fill"></i></div>
-                <div class="detail-content">
-                    <h6>الحالة</h6>
-                    @php
-                        $sBg = 'bg-secondary text-white'; $sTx = $serviceRequest->status;
-                        if($serviceRequest->status=='open')     { $sBg='bg-success text-white'; $sTx='نشط'; }
-                        elseif($serviceRequest->status=='draft')    { $sBg='bg-light text-dark';   $sTx='مسودة'; }
-                        elseif($serviceRequest->status=='assigned') { $sBg='bg-warning text-dark'; $sTx='قيد المراجعة'; }
-                    @endphp
-                    <span class="badge {{ $sBg }}" style="border-radius:999px;padding:5px 14px;font-weight:600;">{{ $sTx }}</span>
-                </div>
-            </div>
-            <div class="detail-item" style="grid-column:1/-1;">
-                <div class="detail-icon"><i class="bi bi-tags-fill"></i></div>
-                <div class="detail-content" style="width:100%;">
-                    <h6>الفئات</h6>
-                    <div class="badge-wrapper">
-                        @foreach($serviceRequest->categories as $cat)
-                            <span class="badge" style="background:#eef2ff;color:#4338ca;border-radius:8px;padding:5px 12px;font-weight:600;font-size:0.82rem;">
-                                <i class="bi bi-tag-fill ms-1" style="font-size:0.7rem;opacity:0.7;"></i>{{ $cat->name }}
-                            </span>
-                        @endforeach
-                    </div>
-                </div>
+        </div>
+        <div class="bg-white p-4 rounded-4 shadow-sm border border-light">
+            <p dir="auto" class="mb-0 text-dark" style="line-height: 1.8; font-size: 1.05rem; white-space: pre-line;">{{ $serviceRequest->description }}</p>
+            
+            <div class="d-flex flex-wrap gap-2 mt-4 pt-3 border-top border-light">
+                @foreach($serviceRequest->categories as $cat)
+                    <span class="badge bg-light text-primary border border-primary border-opacity-25 px-3 py-2 rounded-pill fw-normal">
+                        {{ $cat->name }}
+                    </span>
+                @endforeach
             </div>
         </div>
+        @if($serviceRequest->image)
+            <div class="mb-3 rounded-4 overflow-hidden shadow-sm border border-light bg-white" style="max-height: 400px; display: flex; justify-content: center; align-items: center;">
+                <img src="{{ filter_var($serviceRequest->image, FILTER_VALIDATE_URL) ? $serviceRequest->image : Storage::url($serviceRequest->image) }}" 
+                     class="img-fluid" 
+                     style="object-fit: contain; width: 100%; max-height: 400px;" 
+                     alt="صورة الطلب">
+            </div>
+        @else
+            <div class="mb-3 rounded-4 overflow-hidden shadow-sm border border-light bg-light d-flex align-items-center justify-content-center" style="height: 200px; border: 2px dashed #cbd5e1 !important;">
+                <div class="text-center text-muted">
+                    <i class="bi bi-image fs-1 d-block mb-2 opacity-50"></i>
+                    <span style="font-size: 0.95rem; font-weight: 600;">لا توجد صورة مرفقة</span>
+                </div>
+            </div>
+        @endif
     </div>
 
     @php
@@ -656,13 +671,21 @@
                             @endif
                         </div>
                         <div class="offer-footer">
-                            @if($isRequester)
-                                <button class="btn-contract">
-                                    <i class="bi bi-file-earmark-pdf"></i> View Contract
-                                </button>
-                                <button type="button" class="btn-reject" onclick="handleOfferAction('{{ route('dashboard.requests.offers.reset', [$serviceRequest->id, $offer->id]) }}', 'POST', this)">
-                                    <i class="bi bi-arrow-counterclockwise"></i> Reset
-                                </button>
+                            @php
+                                $linkedOrder = \App\Models\Order::where('offer_id', $offer->id)->first();
+                                $isOfferOwner = $offer->user_id === ($currentUser->id ?? null);
+                            @endphp
+
+                            @if($isRequester || $isOfferOwner)
+                                @if($linkedOrder)
+                                    <a href="{{ route('dashboard.orders.show', $linkedOrder->id) }}" class="btn-contract text-decoration-none">
+                                        <i class="bi bi-briefcase-fill"></i> عرض الطلب
+                                    </a>
+                                @else
+                                    <span class="text-muted" style="font-size: 0.85rem;">
+                                        <i class="bi bi-hourglass-split"></i> في انتظار إنشاء الطلب
+                                    </span>
+                                @endif
                             @endif
                             <button class="btn-icon" title="مراسلة"><i class="bi bi-chat"></i></button>
                         </div>

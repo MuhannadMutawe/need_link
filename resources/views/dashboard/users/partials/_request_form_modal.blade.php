@@ -24,7 +24,8 @@
                       class="w-100"
                       style="max-width: 750px;"
                       action="{{ route('dashboard.requests.store') }}"
-                      method="POST">
+                      method="POST"
+                      enctype="multipart/form-data">
 
                     @csrf
                     <input type="hidden" name="_method" id="requestMethod" value="POST">
@@ -46,6 +47,16 @@
                             <textarea name="description" class="form-control" rows="4" dir="auto"
                                       placeholder="اشرح تفاصيل ومتطلبات الخدمة التي تحتاجها"
                                       required></textarea>
+                        </div>
+
+                        {{-- Image Upload --}}
+                        <div class="col-12">
+                            <label class="form-label">صورة توضيحية <span class="text-muted">(اختياري)</span></label>
+                            <input class="form-control" type="file" name="image" accept="image/*"
+                                   style="font-size: 1rem !important;">
+                            <small class="text-muted d-block mt-1">
+                                يمكنك إرفاق صورة توضح فكرة طلبك بشكل أفضل.
+                            </small>
                         </div>
 
                         {{-- Categories --}}

@@ -10,10 +10,8 @@ use App\Http\Controllers\main\MainController;
 use Illuminate\Support\Facades\Route;
 
 // Main Routes
-Route::prefix('main')->name('main.')->controller(MainController::class)->group(function () {
-    Route::get('landing-page', 'index')->name('showLanding');
-    Route::get('requests', 'browseRequests')->name('requests');
-});
+Route::get('/', [MainController::class, 'browseRequests'])->name('main.requests');
+Route::get('landing-page', [MainController::class, 'index'])->name('main.showLanding');
 
 // Auth Routes
 Route::prefix('auth')->name('auth.')->group(function () {
@@ -58,6 +56,30 @@ Route::prefix('dashboard')->name('dashboard.')->group(function () {
         Route::post('/', 'store')->name('store');
         Route::put('{offer}', 'update')->name('update');
         Route::delete('{offer}', 'destroy')->name('destroy');
+    });
+
+    // User Orders Routes
+    Route::prefix('orders')->name('orders.')->controller(\App\Http\Controllers\dashboard\users\OrdersController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('{order}', 'show')->name('show');
+    });
+
+    // User Order Actions
+    Route::prefix('orders/{order}')->name('orders.actions.')->controller(\App\Http\Controllers\dashboard\users\OrderActionController::class)->group(function () {
+        // Service order actions
+        Route::post('delivery', 'submitDelivery')->name('delivery');
+        Route::post('confirm-completion', 'confirmCompletion')->name('confirmCompletion');
+        Route::post('request-revision', 'requestRevision')->name('requestRevision');
+
+        // Product order actions
+        Route::post('confirm-payment', 'confirmPayment')->name('confirmPayment');
+        Route::post('mark-shipped', 'markShipped')->name('markShipped');
+        Route::post('confirm-receipt', 'confirmReceipt')->name('confirmReceipt');
+
+        // Escape hatches (both order types)
+        Route::post('cancellation', 'requestCancellation')->name('cancellation');
+        Route::post('cancellation/{cancellationRequest}/respond', 'respondCancellation')->name('cancellation.respond');
+        Route::post('dispute', 'openDispute')->name('dispute');
     });
 
     // Accept, Reject, Reset Offers (POST)

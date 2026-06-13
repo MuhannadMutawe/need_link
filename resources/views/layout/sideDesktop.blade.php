@@ -1,16 +1,29 @@
   <!-- Desktop Sidebar -->
       <aside class="col-lg-3 col-xl-2 d-none d-lg-block admin-sidebar-simple p-0">
-        <div class="p-4 border-bottom border-light border-opacity-10">
-          <div class="d-flex align-items-center gap-2">
-            <img src="../assets/logo/logo.png" class="admin-logo-img" alt="NeedLink Logo">
-            <div>
-              <h5 class="mb-0 fw-bold">
-                <span class="text-orange">Need</span><span class="text-blue">Link</span>
-              </h5>
-              <small class="text-white-50">لوحة التحكم</small>
+
+
+        @auth
+        <div class="p-3 border-bottom border-light border-opacity-10">
+          <div class="d-flex align-items-center gap-3">
+            @if(auth()->user()->avatar)
+              <img src="{{ auth()->user()->avatar }}" alt="{{ auth()->user()->name }}"
+                   class="rounded-circle border border-white border-opacity-25"
+                   style="width: 42px; height: 42px; object-fit: cover; flex-shrink: 0;">
+            @else
+              <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center flex-shrink-0"
+                   style="width: 42px; height: 42px; font-weight: 700; font-size: 1rem; color: #fff; background: linear-gradient(135deg, #6366f1, #4338ca) !important;">
+                {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
+              </div>
+            @endif
+            <div style="min-width: 0;">
+              <p class="mb-0 fw-bold text-white" dir="auto" style="font-size: 0.92rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                {{ auth()->user()->name }}
+              </p>
+              <small class="text-white-50" style="font-size: 0.75rem;">مستخدم نشط</small>
             </div>
           </div>
         </div>
+        @endauth
 
         <div class="p-3">
           <div class="list-group admin-side-links">
@@ -22,25 +35,16 @@
               <i class="bi bi-people-fill ms-2"></i> طلباتي
             </a>
 
-            <a href="{{ route('dashboard.offers.myOffers') }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-              <span><i class="bi bi-person-check-fill ms-2"></i>عروضي</span>
+            <a href="{{ route('dashboard.offers.myOffers') }}" class="list-group-item list-group-item-action">
+              <i class="bi bi-person-check-fill ms-2"></i> عروضي
             </a>
 
-            <a href="#" class="list-group-item list-group-item-action">
+            <a href="{{ route('dashboard.orders.index') }}" class="list-group-item list-group-item-action">
               <i class="bi bi-briefcase-fill ms-2"></i> الخدمات
-            </a>
-
-            <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-              <span><i class="bi bi-flag-fill ms-2"></i> البلاغات</span>
-              <span class="badge bg-danger">7</span>
             </a>
 
             <a href="#" class="list-group-item list-group-item-action">
               <i class="bi bi-chat-dots-fill ms-2"></i> الرسائل
-            </a>
-
-            <a href="#" class="list-group-item list-group-item-action">
-              <i class="bi bi-bar-chart-fill ms-2"></i> الإحصائيات
             </a>
 
             <a href="#" class="list-group-item list-group-item-action">

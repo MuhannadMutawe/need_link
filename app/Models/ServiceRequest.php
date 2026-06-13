@@ -18,6 +18,7 @@ class ServiceRequest extends Model
         'user_id',
         'title',
         'description',
+        'image',
         'pricing_type',
         'budget',
         'currency_code',

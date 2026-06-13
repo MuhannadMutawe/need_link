@@ -15,10 +15,11 @@ class MainController extends Controller
     public function browseRequests()
     {
         $requests = \App\Models\ServiceRequest::with(['user', 'categories'])
+            ->withCount('offers')
             ->where('expires_at', '>', now())
             ->where('status', 'open')
             ->latest()
-            ->paginate(3);
+            ->paginate(12);
 
         return view('main.requests', compact('requests'));
     }

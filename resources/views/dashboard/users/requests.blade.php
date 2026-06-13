@@ -102,7 +102,7 @@
                             {{-- Image Area --}}
                             <div class="position-relative">
                                 {{-- Use request image if exists, fallback to placeholder --}}
-                                <img src="{{ $req->image ?? 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=600&auto=format&fit=crop' }}" 
+                                <img src="{{ $req->image ? (filter_var($req->image, FILTER_VALIDATE_URL) ? $req->image : Storage::url($req->image)) : 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=600&auto=format&fit=crop' }}" 
                                      alt="{{ $req->title }}" 
                                      style="width: 100%; height: 200px; object-fit: cover;">
                                 

@@ -187,7 +187,7 @@
       <a href="#" class="mob-nav-link">
         <i class="bi bi-person-check-fill"></i> طلبات التحقق
       </a>
-      <a href="#" class="mob-nav-link">
+      <a href="{{ route('dashboard.orders.index') }}" class="mob-nav-link">
         <i class="bi bi-briefcase-fill"></i> الخدمات
       </a>
       <a href="#" class="mob-nav-link">
