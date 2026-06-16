@@ -1,9 +1,7 @@
 <div class="col">
     <div class="card h-100 border-0 shadow-sm">
         <div class="card-body">
-            <div class="d-flex justify-content-between align-items-start mb-3">
-                <span class="badge bg-light text-dark border">{{ $order->order_type === 'service' ? 'خدمة' : 'منتج' }}</span>
-                
+            <div class="d-flex justify-content-end align-items-start mb-3">
                 @php
                     $statusColor = 'secondary';
                     $statusText = 'قيد الانتظار';
@@ -65,9 +63,8 @@
 
         </div>
         <div class="card-footer bg-white border-top-0 pt-0">
-            <div class="d-flex justify-content-between align-items-center text-muted" style="font-size: 12px;">
+            <div class="text-muted" style="font-size: 12px;">
                 <span><i class="bi bi-clock me-1"></i> {{ $order->created_at->format('Y-m-d') }}</span>
-                <a href="{{ route('dashboard.orders.show', $order->id) }}" class="btn btn-sm btn-outline-primary">التفاصيل <i class="bi bi-arrow-left ms-1"></i></a>
             </div>
         </div>
     </div>

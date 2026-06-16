@@ -23,6 +23,14 @@
               <i class="bi bi-tags-fill ms-2"></i> إدارة الفئات
             </a>
 
+            <a href="{{ route('dashboard.disputes.index') }}" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between {{ request()->routeIs('dashboard.disputes.*') ? 'active' : '' }}">
+              <span><i class="bi bi-shield-exclamation ms-2"></i> إدارة النزاعات</span>
+              @php $openDisputes = \App\Models\OrderDispute::where('status','open')->count(); @endphp
+              @if($openDisputes > 0)
+                <span class="badge bg-danger rounded-pill">{{ $openDisputes }}</span>
+              @endif
+            </a>
+
             <div class="mt-4 mb-2">
                 <small class="text-white-50 px-3 fw-bold">العودة</small>
             </div>

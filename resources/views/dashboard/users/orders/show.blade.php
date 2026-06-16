@@ -35,10 +35,44 @@
 
     <!-- Active Dispute Banner -->
     @if($order->status === 'disputed')
-        <div class="alert alert-danger d-flex align-items-center mb-4" role="alert">
-            <i class="bi bi-exclamation-triangle-fill fs-4 me-3"></i>
-            <div>
-                <strong>الطلب متنازع عليه</strong> - قيد المراجعة من قبل الإدارة. تم تعطيل كافة الإجراءات حتى يتم حل النزاع.
+        @php
+            $activeDispute = $order->disputes()->where('status', 'open')->first();
+        @endphp
+        <div class="alert alert-danger mb-4 shadow-sm border-danger">
+            <div class="d-flex align-items-start gap-3">
+                <i class="bi bi-exclamation-triangle-fill fs-3 mt-1"></i>
+                <div class="w-100">
+                    <h5 class="alert-heading fw-bold">الطلب متنازع عليه</h5>
+                    <p class="mb-2">قيد المراجعة من قبل الإدارة. تم تعطيل كافة الإجراءات حتى يتم حل النزاع.</p>
+                    
+                    @if($activeDispute)
+                        <div class="bg-white bg-opacity-50 p-3 rounded mt-3">
+                            <h6 class="fw-bold mb-1">سبب النزاع (من {{ $activeDispute->opened_by === $user->id ? 'قبلك' : 'الطرف الآخر' }}):</h6>
+                            <p class="mb-0 small text-dark">{{ $activeDispute->reason }}</p>
+                        </div>
+                        
+                        @if($activeDispute->counter_reason)
+                            <div class="bg-white bg-opacity-50 p-3 rounded mt-2">
+                                <h6 class="fw-bold mb-1">رد {{ $activeDispute->opened_by === $user->id ? 'الطرف الآخر' : 'قبلك' }} على النزاع:</h6>
+                                <p class="mb-0 small text-dark">{{ $activeDispute->counter_reason }}</p>
+                            </div>
+                        @elseif($activeDispute->opened_by !== $user->id)
+                            <hr class="border-danger opacity-25 my-3">
+                            <p class="fw-bold mb-2">يرجى إضافة ردك وتوضيح موقفك للإدارة (مهم جداً):</p>
+                            <form action="{{ route('dashboard.orders.actions.dispute.respond', $order->id) }}" method="POST">
+                                @csrf
+                                <div class="mb-2">
+                                    <textarea name="counter_reason" class="form-control" rows="3" required placeholder="اشرح وجهة نظرك بالتفصيل للإدارة..."></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-danger btn-sm fw-bold px-4">إرسال الرد للإدارة</button>
+                            </form>
+                        @else
+                            <div class="alert alert-warning mt-3 mb-0 small py-2">
+                                <i class="bi bi-hourglass-split me-1"></i> في انتظار رد الطرف الآخر على النزاع.
+                            </div>
+                        @endif
+                    @endif
+                </div>
             </div>
         </div>
     @endif
@@ -299,6 +333,7 @@
         
         <!-- Sidebar Column -->
         <div class="col-lg-4">
+            @if(!in_array($order->status, ['cancelled', 'disputed']))
             <!-- Order status overview -->
             <div class="card border-0 shadow-sm mb-4">
                 <div class="card-body">
@@ -338,6 +373,7 @@
                     @endif
                 </div>
             </div>
+            @endif
 
             <!-- Tracking Details (if product) -->
             @if($order->order_type === 'product' && $order->is_shipped)

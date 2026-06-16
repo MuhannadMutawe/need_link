@@ -6,6 +6,7 @@ use App\Http\Controllers\dashboard\DashboardController;
 use App\Http\Controllers\dashboard\users\requests\RequestsController;
 use App\Http\Controllers\dashboard\users\offers\OffersController;
 use App\Http\Controllers\dashboard\admin\CategoryController;
+use App\Http\Controllers\dashboard\admin\AdminDisputesController;
 use App\Http\Controllers\main\MainController;
 use Illuminate\Support\Facades\Route;
 
@@ -49,6 +50,12 @@ Route::prefix('dashboard')->name('dashboard.')->group(function () {
         Route::delete('{category}', 'destroy')->name('destroy');
     });
 
+    // Admin Disputes Routes
+    Route::prefix('disputes')->name('disputes.')->controller(AdminDisputesController::class)->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('{dispute}/resolve', 'resolve')->name('resolve');
+    });
+
     // User Offers Routes
     Route::prefix('offers')->name('offers.')->controller(OffersController::class)->group(function () {
         Route::get('my-offers', 'myOffers')->name('myOffers');
@@ -80,6 +87,7 @@ Route::prefix('dashboard')->name('dashboard.')->group(function () {
         Route::post('cancellation', 'requestCancellation')->name('cancellation');
         Route::post('cancellation/{cancellationRequest}/respond', 'respondCancellation')->name('cancellation.respond');
         Route::post('dispute', 'openDispute')->name('dispute');
+        Route::post('dispute/respond', 'respondDispute')->name('dispute.respond');
     });
 
     // Accept, Reject, Reset Offers (POST)

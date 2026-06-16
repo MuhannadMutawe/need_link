@@ -15,6 +15,8 @@ class OrderDispute extends Model
         'order_id',
         'opened_by',
         'reason',
+        'counter_reason',
+        'counter_reason_submitted_at',
         'status',
         'resolved_by',
         'resolved_at',

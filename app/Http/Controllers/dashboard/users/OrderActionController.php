@@ -319,4 +319,29 @@ class OrderActionController extends Controller
 
         return redirect()->back()->with('success', 'تم رفع النزاع. ستتدخل الإدارة قريباً.');
     }
+
+    /**
+     * OTHER PARTY: Respond to an open dispute with a counter reason
+     */
+    public function respondDispute(Request $request, Order $order)
+    {
+        $user = $this->authUser();
+
+        abort_if($order->client_id !== $user->id && $order->provider_id !== $user->id, 403);
+        abort_if($order->status !== 'disputed', 400, 'Order is not disputed');
+
+        $dispute = $order->disputes()->where('status', 'open')->firstOrFail();
+
+        abort_if($dispute->opened_by === $user->id, 403, 'You cannot respond to your own dispute');
+        abort_if($dispute->counter_reason !== null, 400, 'Counter reason already submitted');
+
+        $validated = $request->validate(['counter_reason' => 'required|string']);
+
+        $dispute->update([
+            'counter_reason' => $validated['counter_reason'],
+            'counter_reason_submitted_at' => now(),
+        ]);
+
+        return redirect()->back()->with('success', 'تم إضافة ردك على النزاع. الإدارة ستقوم بمراجعة الطرفين.');
+    }
 }
