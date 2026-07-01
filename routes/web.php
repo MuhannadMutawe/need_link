@@ -75,13 +75,9 @@ Route::prefix('dashboard')->name('dashboard.')->group(function () {
     Route::prefix('orders/{order}')->name('orders.actions.')->controller(\App\Http\Controllers\dashboard\users\OrderActionController::class)->group(function () {
         // Service order actions
         Route::post('delivery', 'submitDelivery')->name('delivery');
-        Route::post('confirm-completion', 'confirmCompletion')->name('confirmCompletion');
+        Route::post('request-completion', 'requestCompletion')->name('requestCompletion');
+        Route::post('request-completion/{completionRequest}/respond', 'respondCompletion')->name('requestCompletion.respond');
         Route::post('request-revision', 'requestRevision')->name('requestRevision');
-
-        // Product order actions
-        Route::post('confirm-payment', 'confirmPayment')->name('confirmPayment');
-        Route::post('mark-shipped', 'markShipped')->name('markShipped');
-        Route::post('confirm-receipt', 'confirmReceipt')->name('confirmReceipt');
 
         // Escape hatches (both order types)
         Route::post('cancellation', 'requestCancellation')->name('cancellation');

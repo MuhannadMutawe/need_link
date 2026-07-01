@@ -17,10 +17,8 @@
                     $hasActionRequired = false;
                     if ($role === 'client') {
                         if ($order->status === 'completed_pending_confirmation') $hasActionRequired = true;
-                        if ($order->status === 'in_progress' && $order->order_type === 'product' && !$order->is_paid) $hasActionRequired = true;
                     } else {
-                        if ($order->status === 'in_progress' && $order->order_type === 'service') $hasActionRequired = true;
-                        if ($order->status === 'in_progress' && $order->order_type === 'product' && $order->is_paid && !$order->is_shipped) $hasActionRequired = true;
+                        if ($order->status === 'in_progress') $hasActionRequired = true;
                     }
                     if ($order->cancellationRequests()->where('status', 'pending')->where('requested_by', '!=', auth()->id() ?? 1)->exists()) {
                         $hasActionRequired = true;

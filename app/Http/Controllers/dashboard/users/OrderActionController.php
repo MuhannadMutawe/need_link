@@ -32,7 +32,7 @@ class OrderActionController extends Controller
         $user = $this->authUser();
 
         abort_if($order->provider_id !== $user->id, 403);
-        abort_if($order->status !== 'in_progress' || $order->order_type !== 'service', 400, 'Invalid state');
+        abort_if(!in_array($order->status, ['in_progress', 'completed_pending_confirmation']), 400, 'Invalid state');
 
         $validated = $request->validate([
             'message'        => 'required|string',
@@ -56,37 +56,74 @@ class OrderActionController extends Controller
                     ]);
                 }
             }
-
-            $order->update([
-                'status'              => 'completed_pending_confirmation',
-                'confirm_deadline_at' => now()->addDays(5),
-            ]);
         });
 
         return redirect()->back()->with('success', 'تم إرسال التسليم بنجاح. في انتظار تأكيد العميل.');
     }
 
     /**
-     * CLIENT: Confirm completion (service order, pending_confirmation)
-     * → sets status to completed
+     * EITHER PARTY: Request completion
      */
-    public function confirmCompletion(Request $request, Order $order)
+    public function requestCompletion(Request $request, Order $order)
     {
         $user = $this->authUser();
 
-        abort_if($order->client_id !== $user->id, 403);
-        abort_if($order->status !== 'completed_pending_confirmation', 400, 'Invalid state');
+        abort_if($order->client_id !== $user->id && $order->provider_id !== $user->id, 403);
+        abort_if(!in_array($order->status, ['in_progress', 'completed_pending_confirmation']), 400, 'Invalid state');
+        abort_if(
+            $order->completionRequests()->where('status', 'pending')->exists(),
+            400,
+            'Pending completion request already exists'
+        );
 
-        DB::transaction(function () use ($order) {
-            $order->update([
-                'status'              => 'completed',
-                'completed_at'        => now(),
-                'confirm_deadline_at' => null,
-            ]);
-            $order->serviceRequest->update(['status' => 'completed']);
+        \App\Models\OrderCompletionRequest::create([
+            'order_id'     => $order->id,
+            'requested_by' => $user->id,
+            'status'       => 'pending',
+        ]);
+
+        return redirect()->back()->with('success', 'تم إرسال طلب تأكيد الإنجاز. في انتظار موافقة الطرف الآخر.');
+    }
+
+    /**
+     * OTHER PARTY: Accept or reject a completion request
+     */
+    public function respondCompletion(Request $request, Order $order, \App\Models\OrderCompletionRequest $completionRequest)
+    {
+        $user = $this->authUser();
+
+        abort_if($order->client_id !== $user->id && $order->provider_id !== $user->id, 403);
+        abort_if($completionRequest->requested_by === $user->id, 403, 'Cannot respond to your own request');
+        abort_if($completionRequest->status !== 'pending', 400, 'Already handled');
+
+        $validated = $request->validate(['action' => 'required|in:accept,reject']);
+
+        DB::transaction(function () use ($order, $completionRequest, $user, $validated) {
+            if ($validated['action'] === 'accept') {
+                $completionRequest->update([
+                    'status'       => 'agreed',
+                    'responded_by' => $user->id,
+                    'responded_at' => now(),
+                ]);
+                $order->update([
+                    'status'              => 'completed',
+                    'completed_at'        => now(),
+                    'confirm_deadline_at' => null,
+                ]);
+                $order->serviceRequest->update(['status' => 'completed']);
+            } else {
+                $completionRequest->update([
+                    'status'       => 'rejected',
+                    'responded_by' => $user->id,
+                    'responded_at' => now(),
+                ]);
+            }
         });
 
-        return redirect()->back()->with('success', 'تم تأكيد اكتمال الطلب بنجاح.');
+        return redirect()->back()->with(
+            'success',
+            $validated['action'] === 'accept' ? 'تم الموافقة على طلب الإنجاز واكتمال الطلب بنجاح.' : 'تم رفض طلب الإنجاز. الطلب لا يزال مستمراً.'
+        );
     }
 
     /**
@@ -98,7 +135,7 @@ class OrderActionController extends Controller
         $user = $this->authUser();
 
         abort_if($order->client_id !== $user->id, 403);
-        abort_if($order->status !== 'completed_pending_confirmation' || $order->order_type !== 'service', 400, 'Invalid state');
+        abort_if(!in_array($order->status, ['in_progress', 'completed_pending_confirmation']), 400, 'Invalid state');
         abort_if($order->revision_count >= 3, 400, 'Maximum revisions reached');
 
         $validated = $request->validate(['reason' => 'required|string']);
@@ -120,86 +157,6 @@ class OrderActionController extends Controller
         return redirect()->back()->with('success', 'تم إرسال طلب التعديل. الكرة في ملعب مقدم الخدمة.');
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // PRODUCT ORDER ACTIONS
-    // ─────────────────────────────────────────────────────────────────────────
-
-    /**
-     * CLIENT: Confirm payment sent outside platform (product order, in_progress, !is_paid)
-     * → marks is_paid = true, status stays in_progress
-     */
-    public function confirmPayment(Request $request, Order $order)
-    {
-        $user = $this->authUser();
-
-        abort_if($order->client_id !== $user->id, 403);
-        abort_if($order->order_type !== 'product' || $order->is_paid, 400, 'Invalid state');
-
-        $order->update(['is_paid' => true]);
-
-        return redirect()->back()->with('success', 'تم تأكيد إرسال المبلغ. في انتظار شحن المنتج من البائع.');
-    }
-
-    /**
-     * PROVIDER: Mark as shipped (product order, in_progress, is_paid = true)
-     * → saves tracking info on order, sets status to completed_pending_confirmation
-     */
-    public function markShipped(Request $request, Order $order)
-    {
-        $user = $this->authUser();
-
-        abort_if($order->provider_id !== $user->id, 403);
-        abort_if(
-            $order->order_type !== 'product' || !$order->is_paid || $order->is_shipped,
-            400,
-            'Invalid state'
-        );
-
-        $validated = $request->validate([
-            'carrier'         => 'nullable|string|max:100',
-            'tracking_number' => 'nullable|string|max:100',
-            'tracking_url'    => 'nullable|url|max:500',
-        ]);
-
-        $order->update([
-            'carrier'                => $validated['carrier'] ?? null,
-            'tracking_number'        => $validated['tracking_number'] ?? null,
-            'tracking_url'           => $validated['tracking_url'] ?? null,
-            'is_shipped'             => true,
-            'shipped_at'             => now(),
-            'status'                 => 'completed_pending_confirmation',
-            'confirm_deadline_at'    => now()->addDays(7),
-        ]);
-
-        return redirect()->back()->with('success', 'تم تسجيل الشحن. في انتظار تأكيد استلام العميل.');
-    }
-
-    /**
-     * CLIENT: Confirm receipt (product order, pending_confirmation, is_shipped = true)
-     * → sets status to completed
-     */
-    public function confirmReceipt(Request $request, Order $order)
-    {
-        $user = $this->authUser();
-
-        abort_if($order->client_id !== $user->id, 403);
-        abort_if(
-            $order->status !== 'completed_pending_confirmation' || $order->order_type !== 'product',
-            400,
-            'Invalid state'
-        );
-
-        DB::transaction(function () use ($order) {
-            $order->update([
-                'status'              => 'completed',
-                'completed_at'        => now(),
-                'confirm_deadline_at' => null,
-            ]);
-            $order->serviceRequest->update(['status' => 'completed']);
-        });
-
-        return redirect()->back()->with('success', 'تم تأكيد الاستلام وإغلاق الطلب بنجاح.');
-    }
 
     // ─────────────────────────────────────────────────────────────────────────
     // ESCAPE HATCHES (available at any active stage for both types)
@@ -279,8 +236,6 @@ class OrderActionController extends Controller
 
     /**
      * EITHER PARTY: Open a dispute (admin resolves)
-     * For service orders: at least one delivery must exist
-     * For product orders: is_paid must be true
      */
     public function openDispute(Request $request, Order $order)
     {
@@ -293,15 +248,7 @@ class OrderActionController extends Controller
             'Invalid state'
         );
 
-        // Guard: service order must have at least one delivery before disputing
-        if ($order->order_type === 'service' && $order->deliveries()->count() === 0) {
-            return redirect()->back()->withErrors(['dispute' => 'لا يمكن رفع نزاع قبل أن يقدم مقدم الخدمة أي تسليم.']);
-        }
 
-        // Guard: product order must have confirmed payment before disputing
-        if ($order->order_type === 'product' && !$order->is_paid) {
-            return redirect()->back()->withErrors(['dispute' => 'لا يمكن رفع نزاع قبل تأكيد الدفع.']);
-        }
 
         abort_if($order->disputes()->where('status', 'open')->exists(), 400, 'Dispute already open');
 

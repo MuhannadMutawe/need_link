@@ -19,7 +19,6 @@ class Order extends Model
         'provider_id',
         'agreed_price',
         'currency_code',
-        'order_type',
         'status',
         'is_paid',
         'deadline_at',
@@ -30,23 +29,15 @@ class Order extends Model
         'cancelled_by',
         'cancellation_reason',
         'closed_by',
-        // Product shipping fields
-        'carrier',
-        'tracking_number',
-        'tracking_url',
-        'is_shipped',
-        'shipped_at',
     ];
 
     protected $casts = [
         'agreed_price' => 'decimal:2',
         'is_paid' => 'boolean',
-        'is_shipped' => 'boolean',
         'deadline_at' => 'datetime',
         'started_at' => 'datetime',
         'completed_at' => 'datetime',
         'confirm_deadline_at' => 'datetime',
-        'shipped_at' => 'datetime',
     ];
 
     public function serviceRequest(): BelongsTo
@@ -97,5 +88,10 @@ class Order extends Model
     public function disputes(): HasMany
     {
         return $this->hasMany(OrderDispute::class)->orderBy('created_at', 'asc');
+    }
+
+    public function completionRequests(): HasMany
+    {
+        return $this->hasMany(OrderCompletionRequest::class)->orderBy('created_at', 'asc');
     }
 }

@@ -11,7 +11,6 @@
             <a href="{{ route('dashboard.orders.index') }}" class="text-decoration-none text-muted mb-2 d-inline-block"><i class="bi bi-arrow-right"></i> عودة لطلباتي</a>
             <h4 class="mb-0 fw-bold d-flex align-items-center gap-2">
                 {{ $order->serviceRequest->title }}
-                <span class="badge bg-light text-dark border fs-6">{{ $order->order_type === 'service' ? 'خدمة' : 'منتج' }}</span>
             </h4>
         </div>
         
@@ -114,6 +113,42 @@
         </div>
     @endif
 
+    <!-- Pending Completion Banner -->
+    @php
+        $pendingCompletion = $order->completionRequests()->where('status', 'pending')->first();
+    @endphp
+    @if($pendingCompletion && $order->status !== 'disputed')
+        <div class="alert alert-success mb-4 shadow-sm border-success">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-3">
+                    <i class="bi bi-check-circle-fill fs-3 text-success"></i>
+                    <div>
+                        <h6 class="alert-heading fw-bold mb-1">
+                            {{ $pendingCompletion->requested_by === $user->id ? 'لقد طلبت تأكيد إنجاز الطلب' : 'الطرف الآخر يطلب تأكيد إنجاز الطلب' }}
+                        </h6>
+                    </div>
+                </div>
+                
+                @if($pendingCompletion->requested_by !== $user->id)
+                    <div class="d-flex gap-2">
+                        <form action="{{ route('dashboard.orders.actions.requestCompletion.respond', [$order->id, $pendingCompletion->id]) }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="action" value="accept">
+                            <button type="submit" class="btn btn-success btn-sm rounded-pill fw-bold">الموافقة على الإنجاز</button>
+                        </form>
+                        <form action="{{ route('dashboard.orders.actions.requestCompletion.respond', [$order->id, $pendingCompletion->id]) }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="action" value="reject">
+                            <button type="submit" class="btn btn-outline-secondary btn-sm rounded-pill fw-bold">رفض الطلب</button>
+                        </form>
+                    </div>
+                @else
+                    <span class="badge bg-success text-white">في انتظار رد الطرف الآخر</span>
+                @endif
+            </div>
+        </div>
+    @endif
+
     <div class="row g-4">
         <!-- Main Content Column -->
         <div class="col-lg-8">
@@ -150,7 +185,7 @@
             </div>
 
             <!-- Action Panel -->
-            @if($order->status !== 'disputed' && $order->status !== 'cancelled' && $order->status !== 'completed' && !$pendingCancellation)
+            @if($order->status !== 'disputed' && $order->status !== 'cancelled' && $order->status !== 'completed' && !$pendingCancellation && !$pendingCompletion)
                 <div class="card border-0 shadow-sm mb-4 border-top border-primary border-3">
                     <div class="card-header bg-white border-0 pt-4 pb-0">
                         <h5 class="fw-bold mb-0">الإجراءات المتاحة</h5>
@@ -159,15 +194,10 @@
                         
                         <!-- Client Actions -->
                         @if($isClient)
-                            
-                            @if($order->order_type === 'service' && $order->status === 'completed_pending_confirmation')
-                                <div class="alert alert-info">لقد قام مقدم الخدمة بتسليم العمل. يرجى المراجعة والتأكيد.</div>
+
+                            @if($order->status === 'completed_pending_confirmation')
+                                <div class="alert alert-info">لقد قام مقدم الخدمة بتسليم العمل. يرجى المراجعة.</div>
                                 <div class="d-flex gap-3">
-                                    <form action="{{ route('dashboard.orders.actions.confirmCompletion', $order->id) }}" method="POST">
-                                        @csrf
-                                        <button type="submit" class="btn btn-success fw-bold px-4"><i class="bi bi-check-circle me-1"></i> تأكيد الاستلام واكتمال الطلب</button>
-                                    </form>
-                                    
                                     @if($order->revision_count < 3)
                                         <button type="button" class="btn btn-outline-warning fw-bold" data-bs-toggle="modal" data-bs-target="#revisionModal">
                                             <i class="bi bi-arrow-counterclockwise me-1"></i> طلب تعديل
@@ -178,64 +208,34 @@
                                 </div>
                             @endif
 
-                            @if($order->order_type === 'product')
-                                @if($order->status === 'in_progress' && !$order->is_paid)
-                                    <div class="alert alert-info">يرجى تحويل مبلغ الطلب خارج المنصة وتأكيد ذلك ليتمكن البائع من شحن المنتج.</div>
-                                    <form action="{{ route('dashboard.orders.actions.confirmPayment', $order->id) }}" method="POST">
-                                        @csrf
-                                        <button type="submit" class="btn btn-primary fw-bold"><i class="bi bi-credit-card me-1"></i> تأكيد إرسال المبلغ</button>
-                                    </form>
-                                @elseif($order->status === 'completed_pending_confirmation' && $order->is_shipped)
-                                    <div class="alert alert-info">تم شحن المنتج. يرجى تأكيد الاستلام عند وصوله إليك.</div>
-                                    <form action="{{ route('dashboard.orders.actions.confirmReceipt', $order->id) }}" method="POST">
-                                        @csrf
-                                        <button type="submit" class="btn btn-success fw-bold"><i class="bi bi-box-seam me-1"></i> تأكيد استلام المنتج</button>
-                                    </form>
-                                @endif
-                            @endif
-
                         <!-- Provider Actions -->
                         @else
                             
-                            @if($order->order_type === 'service' && $order->status === 'in_progress')
+                            @if(in_array($order->status, ['in_progress', 'completed_pending_confirmation']))
                                 <button type="button" class="btn btn-primary fw-bold px-4" data-bs-toggle="modal" data-bs-target="#deliveryModal">
                                     <i class="bi bi-cloud-arrow-up me-1"></i> تسليم العمل
                                 </button>
-                            @endif
-
-                            @if($order->order_type === 'product')
-                                @if($order->status === 'in_progress')
-                                    @if(!$order->is_paid)
-                                        <div class="alert alert-warning mb-0">في انتظار تأكيد العميل للدفع خارج المنصة.</div>
-                                    @elseif(!$order->is_shipped)
-                                        <div class="alert alert-success">قام العميل بتأكيد الدفع. يرجى شحن المنتج وإضافة معلومات التتبع.</div>
-                                        <button type="button" class="btn btn-primary fw-bold" data-bs-toggle="modal" data-bs-target="#trackingModal">
-                                            <i class="bi bi-truck me-1"></i> إضافة معلومات الشحن
-                                        </button>
-                                    @endif
-                                @endif
                             @endif
 
                         @endif
 
                         <hr class="my-4">
                         
-                        <div class="d-flex gap-2">
+                        <div class="d-flex gap-2 flex-wrap">
+                            <form action="{{ route('dashboard.orders.actions.requestCompletion', $order->id) }}" method="POST" class="d-inline">
+                                @csrf
+                                <button type="submit" class="btn btn-sm btn-outline-success">
+                                    <i class="bi bi-check2-all me-1"></i> طلب تأكيد الإنجاز
+                                </button>
+                            </form>
+                            
                             <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#cancelModal">
                                 <i class="bi bi-x-circle me-1"></i> طلب إلغاء الطلب
                             </button>
                             
-                            @php
-                                $canDispute = false;
-                                if ($order->order_type === 'service' && $order->deliveries()->count() > 0) $canDispute = true;
-                                if ($order->order_type === 'product' && $order->is_paid) $canDispute = true;
-                            @endphp
-                            
-                            @if($canDispute)
-                                <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#disputeModal">
-                                    <i class="bi bi-exclamation-triangle me-1"></i> رفع نزاع للإدارة
-                                </button>
-                            @endif
+                            <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#disputeModal">
+                                <i class="bi bi-exclamation-triangle me-1"></i> رفع نزاع للإدارة
+                            </button>
                         </div>
                         
                     </div>
@@ -344,21 +344,10 @@
                             <div>تم بدء التنفيذ</div>
                         </li>
                         
-                        @if($order->order_type === 'product')
-                            <li class="list-group-item px-0 border-0 d-flex gap-3 align-items-center {{ $order->is_paid ? 'text-success' : 'text-muted' }}">
-                                <i class="bi {{ $order->is_paid ? 'bi-check-circle-fill' : 'bi-circle' }}"></i>
-                                <div>تأكيد الدفع</div>
-                            </li>
-                            <li class="list-group-item px-0 border-0 d-flex gap-3 align-items-center {{ $order->is_shipped ? 'text-success' : 'text-muted' }}">
-                                <i class="bi {{ $order->is_shipped ? 'bi-check-circle-fill' : 'bi-circle' }}"></i>
-                                <div>تم الشحن</div>
-                            </li>
-                        @else
-                            <li class="list-group-item px-0 border-0 d-flex gap-3 align-items-center {{ $order->status === 'completed_pending_confirmation' || $order->status === 'completed' ? 'text-success' : 'text-muted' }}">
-                                <i class="bi {{ $order->status === 'completed_pending_confirmation' || $order->status === 'completed' ? 'bi-check-circle-fill' : 'bi-circle' }}"></i>
-                                <div>تم التسليم المبدئي</div>
-                            </li>
-                        @endif
+                        <li class="list-group-item px-0 border-0 d-flex gap-3 align-items-center {{ $order->deliveries->count() > 0 || $order->status === 'completed' ? 'text-success' : 'text-muted' }}">
+                            <i class="bi {{ $order->status === 'completed_pending_confirmation' || $order->status === 'completed' ? 'bi-check-circle-fill' : 'bi-circle' }}"></i>
+                            <div>تم التسليم المبدئي</div>
+                        </li>
                         
                         <li class="list-group-item px-0 border-0 d-flex gap-3 align-items-center {{ $order->status === 'completed' ? 'text-success' : 'text-muted' }}">
                             <i class="bi {{ $order->status === 'completed' ? 'bi-check-circle-fill' : 'bi-circle' }}"></i>
@@ -375,27 +364,7 @@
             </div>
             @endif
 
-            <!-- Tracking Details (if product) -->
-            @if($order->order_type === 'product' && $order->is_shipped)
-                <div class="card border-0 shadow-sm mb-4">
-                    <div class="card-body">
-                        <h6 class="fw-bold mb-3">معلومات الشحن</h6>
-                        <div class="mb-2">
-                            <small class="text-muted d-block">شركة الشحن</small>
-                            <span class="fw-bold">{{ $order->carrier ?? 'غير محدد' }}</span>
-                        </div>
-                        <div class="mb-2">
-                            <small class="text-muted d-block">رقم التتبع</small>
-                            <span class="fw-bold font-monospace">{{ $order->tracking_number ?? 'غير محدد' }}</span>
-                        </div>
-                        @if($order->tracking_url)
-                            <div class="mt-3">
-                                <a href="{{ $order->tracking_url }}" target="_blank" class="btn btn-sm btn-outline-primary w-100">تتبع الشحنة <i class="bi bi-box-arrow-up-right ms-1"></i></a>
-                            </div>
-                        @endif
-                    </div>
-                </div>
-            @endif
+
 
         </div>
     </div>
@@ -517,37 +486,6 @@
     </div>
 </div>
 
-<!-- Tracking Modal -->
-<div class="modal fade" id="trackingModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content border-0 shadow">
-            <div class="modal-header border-bottom-0">
-                <h5 class="modal-title fw-bold">إضافة معلومات التتبع (الشحن)</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form action="{{ route('dashboard.orders.actions.markShipped', $order->id) }}" method="POST">
-                @csrf
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label text-muted small fw-bold">شركة الشحن (اختياري)</label>
-                        <input type="text" name="carrier" class="form-control" placeholder="مثل: أرامكس، سمسا، DHL...">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label text-muted small fw-bold">رقم التتبع (اختياري)</label>
-                        <input type="text" name="tracking_number" class="form-control" placeholder="رقم بوليصة الشحن">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label text-muted small fw-bold">رابط التتبع (اختياري)</label>
-                        <input type="url" name="tracking_url" class="form-control" placeholder="https://...">
-                    </div>
-                </div>
-                <div class="modal-footer border-top-0">
-                    <button type="button" class="btn btn-light rounded-pill" data-bs-dismiss="modal">إلغاء</button>
-                    <button type="submit" class="btn btn-primary rounded-pill px-4">تأكيد الشحن</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+
 
 @endsection
