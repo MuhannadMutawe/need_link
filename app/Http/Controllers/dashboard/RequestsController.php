@@ -27,7 +27,7 @@ class RequestsController extends Controller implements HasMiddleware
             ->withCount('offers')
             ->where('user_id', auth()->id())
             ->orderByDesc($sortField)
-            ->paginate(3);
+            ->paginate(6);
 
         $categories = \App\Models\Category::all();
 
@@ -63,7 +63,11 @@ class RequestsController extends Controller implements HasMiddleware
             'categories.*' => 'exists:categories,id',
             'title'        => 'required|string|max:255',
             'description'  => 'required|string',
-            'image'        => 'nullable|image|max:5120',
+            'image'        => ['nullable', function($attr, $value, $fail) {
+                if ($value instanceof \Illuminate\Http\UploadedFile) return; // file upload OK
+                if (is_string($value) && filter_var($value, FILTER_VALIDATE_URL)) return; // URL string OK
+                $fail('يجب أن تكون الصورة ملفاً صالحاً أو رابطاً صحيحاً.');
+            }],
             'pricing_type' => 'required|in:fixed,hourly,negotiable',
             'budget'       => 'nullable|numeric|min:0',
             'currency_code'=> 'nullable|string|size:3',
@@ -83,6 +87,10 @@ class RequestsController extends Controller implements HasMiddleware
 
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('request_images');
+        } elseif ($request->filled('image') && is_string($request->image) && filter_var($request->image, FILTER_VALIDATE_URL)) {
+            $validated['image'] = $request->image; // store URL directly
+        } else {
+            unset($validated['image']); // don't save null/invalid
         }
 
         $serviceRequest = ServiceRequest::create($validated);

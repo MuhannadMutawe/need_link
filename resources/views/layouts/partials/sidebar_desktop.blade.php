@@ -27,19 +27,19 @@
 
         <div class="p-3">
           <div class="list-group admin-side-links">
-            <a href="{{ route('dashboard.main') }}" class="list-group-item list-group-item-action active">
+            <a href="{{ route('dashboard.main') }}" class="list-group-item list-group-item-action {{ request()->routeIs('dashboard.main') ? 'active' : '' }}">
               <i class="bi bi-grid-1x2-fill ms-2"></i> الرئيسية
             </a>
 
-            <a href="{{ route('dashboard.requests.index') }}" class="list-group-item list-group-item-action">
+            <a href="{{ route('dashboard.requests.index') }}" class="list-group-item list-group-item-action {{ request()->routeIs('dashboard.requests.*') ? 'active' : '' }}">
               <i class="bi bi-people-fill ms-2"></i> طلباتي
             </a>
 
-            <a href="{{ route('dashboard.offers.myOffers') }}" class="list-group-item list-group-item-action">
+            <a href="{{ route('dashboard.offers.myOffers') }}" class="list-group-item list-group-item-action {{ request()->routeIs('dashboard.offers.*') ? 'active' : '' }}">
               <i class="bi bi-person-check-fill ms-2"></i> عروضي
             </a>
 
-            <a href="{{ route('dashboard.orders.index') }}" class="list-group-item list-group-item-action">
+            <a href="{{ route('dashboard.orders.index') }}" class="list-group-item list-group-item-action {{ request()->routeIs('dashboard.orders.*') ? 'active' : '' }}">
               <i class="bi bi-briefcase-fill ms-2"></i> الخدمات
             </a>
 
@@ -51,11 +51,6 @@
               <i class="bi bi-gear-fill ms-2"></i> الإعدادات
             </a>
             
-            <hr class="text-white-50 my-3">
-            
-            <a href="{{ route('dashboard.categories.index') }}" class="list-group-item list-group-item-action text-warning fw-bold">
-              <i class="bi bi-shield-lock-fill ms-2"></i> لوحة الإدارة
-            </a>
           </div>
         </div>
       </aside>

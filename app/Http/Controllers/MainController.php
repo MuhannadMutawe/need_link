@@ -11,15 +11,25 @@ class MainController extends Controller
         return view('main.landing-page');
     }
 
-    public function browseRequests()
+    public function browseRequests(Request $request)
     {
-        $requests = \App\Models\ServiceRequest::with(['user', 'categories'])
-            ->withCount('offers')
-            ->where('expires_at', '>', now())
-            ->where('status', 'open')
-            ->latest()
-            ->paginate(12);
+        $categories = \App\Models\Category::all();
 
-        return view('main.requests', compact('requests'));
+        $query = \App\Models\ServiceRequest::with(['user', 'categories'])
+            ->withCount('offers')
+            ->where(function($q) {
+                $q->whereNull('expires_at')->orWhere('expires_at', '>', now());
+            })
+            ->where('status', 'open');
+
+        if ($request->has('category_name') && $request->category_name) {
+            $query->whereHas('categories', function($q) use ($request) {
+                $q->where('categories.name', $request->category_name);
+            });
+        }
+
+        $requests = $query->latest()->paginate(12)->appends($request->all());
+
+        return view('main.requests', compact('requests', 'categories'));
     }
 }

@@ -287,6 +287,87 @@
                             ]);
                         }
                         
+                        // Disputes
+                        foreach($order->disputes as $dispute) {
+                            $events->push([
+                                'type' => 'dispute_opened',
+                                'date' => $dispute->created_at,
+                                'title' => 'تم فتح نزاع',
+                                'desc' => $dispute->reason,
+                                'user' => $dispute->opener ? $dispute->opener->name : 'مستخدم',
+                                'icon' => 'bi-shield-exclamation text-danger'
+                            ]);
+                            
+                            if ($dispute->counter_reason) {
+                                $counterUser = $dispute->opened_by === $order->client_id ? ($order->provider ? $order->provider->name : 'مزود') : ($order->client ? $order->client->name : 'عميل');
+                                $events->push([
+                                    'type' => 'dispute_counter',
+                                    'date' => $dispute->counter_reason_submitted_at,
+                                    'title' => 'تم الرد على النزاع',
+                                    'desc' => $dispute->counter_reason,
+                                    'user' => $counterUser,
+                                    'icon' => 'bi-reply-all text-warning'
+                                ]);
+                            }
+                            
+                            if ($dispute->status === 'resolved') {
+                                $events->push([
+                                    'type' => 'dispute_resolved',
+                                    'date' => $dispute->resolved_at,
+                                    'title' => 'تم حل النزاع من الإدارة',
+                                    'desc' => $dispute->resolution_note,
+                                    'user' => $dispute->resolver ? $dispute->resolver->name : 'الإدارة',
+                                    'icon' => 'bi-shield-check text-success'
+                                ]);
+                            }
+                        }
+                        
+                        // Cancellations
+                        foreach($order->cancellationRequests as $cancelReq) {
+                            $events->push([
+                                'type' => 'cancellation_opened',
+                                'date' => $cancelReq->created_at,
+                                'title' => 'طلب إلغاء الطلب',
+                                'desc' => $cancelReq->reason,
+                                'user' => $cancelReq->requester ? $cancelReq->requester->name : 'مستخدم',
+                                'icon' => 'bi-x-octagon text-danger'
+                            ]);
+                            
+                            if ($cancelReq->status !== 'pending') {
+                                $events->push([
+                                    'type' => 'cancellation_responded',
+                                    'date' => $cancelReq->responded_at ?? $cancelReq->updated_at,
+                                    'title' => $cancelReq->status === 'agreed' ? 'تمت الموافقة على الإلغاء' : 'تم رفض طلب الإلغاء',
+                                    'desc' => $cancelReq->status === 'agreed' ? 'تم إلغاء الطلب بناءً على اتفاق الطرفين' : 'تم رفض طلب الإلغاء والطلب لا يزال مستمراً',
+                                    'user' => $cancelReq->responder ? $cancelReq->responder->name : 'الطرف الآخر',
+                                    'icon' => $cancelReq->status === 'agreed' ? 'bi-x-circle-fill text-danger' : 'bi-dash-circle text-secondary'
+                                ]);
+                            }
+                        }
+                        
+                        // Completions
+                        foreach($order->completionRequests as $compReq) {
+                            $events->push([
+                                'type' => 'completion_opened',
+                                'date' => $compReq->created_at,
+                                'title' => 'طلب تأكيد إنجاز',
+                                'desc' => 'تم إرسال طلب لتأكيد الإنجاز النهائي للعمل',
+                                'user' => $compReq->requester ? $compReq->requester->name : 'مستخدم',
+                                'icon' => 'bi-check2-square text-primary'
+                            ]);
+                            
+                            if ($compReq->status !== 'pending') {
+                                $events->push([
+                                    'type' => 'completion_responded',
+                                    'date' => $compReq->responded_at ?? $compReq->updated_at,
+                                    'title' => $compReq->status === 'agreed' ? 'تم تأكيد الإنجاز' : 'تم رفض طلب الإنجاز',
+                                    'desc' => $compReq->status === 'agreed' ? 'اكتمل الطلب بنجاح' : 'تم رفض تأكيد الإنجاز',
+                                    'user' => $compReq->responder ? $compReq->responder->name : 'الطرف الآخر',
+                                    'icon' => $compReq->status === 'agreed' ? 'bi-star-fill text-success' : 'bi-x-circle text-danger'
+                                ]);
+                            }
+                        }
+                        
                         // Sort by date DESC
                         $events = $events->sortByDesc('date')->values();
                     @endphp
@@ -304,7 +385,7 @@
                                     <div class="flex-grow-1 bg-light rounded p-3">
                                         <div class="d-flex justify-content-between align-items-center mb-1">
                                             <h6 class="fw-bold mb-0">{{ $event['title'] }}</h6>
-                                            <small class="text-muted" dir="ltr">{{ $event['date'] ? $event['date']->format('Y-m-d H:i') : '' }}</small>
+                                            <small class="text-muted" dir="ltr">{{ $event['date'] ? \Carbon\Carbon::parse($event['date'])->format('Y-m-d H:i') : '' }}</small>
                                         </div>
                                         @if(isset($event['user']))
                                             <small class="text-muted d-block mb-2">بواسطة: {{ $event['user'] }}</small>

@@ -142,16 +142,21 @@
                 @endif
 
                 @if($dispute->status === 'open')
-                    <form action="{{ route('dashboard.disputes.resolve', $dispute->id) }}" method="POST" class="d-flex gap-2 align-items-end flex-wrap">
+                    <form action="{{ route('dashboard.disputes.resolve', $dispute->id) }}" method="POST" class="d-flex flex-column gap-2 mt-3">
                         @csrf
-                        <div style="flex: 1; min-width: 220px;">
+                        <div>
                             <label class="form-label text-muted" style="font-size: 0.82rem;">قرار الحل <span class="text-danger">*</span></label>
                             <textarea name="resolution_note" class="form-control form-control-sm" rows="2"
                                       placeholder="اكتب قرار الحل (10 أحرف على الأقل)..." dir="auto" required minlength="10"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-sm btn-success px-4 fw-bold rounded-pill mb-1">
-                            <i class="bi bi-check-lg me-1"></i> حل النزاع
-                        </button>
+                        <div class="d-flex gap-2 justify-content-end">
+                            <button type="submit" name="action" value="respond_only" class="btn btn-sm btn-primary px-4 fw-bold rounded-pill">
+                                <i class="bi bi-reply-all me-1"></i> الرد وإكمال الطلب
+                            </button>
+                            <button type="submit" name="action" value="cancel" class="btn btn-sm btn-danger px-4 fw-bold rounded-pill" onclick="return confirm('هل أنت متأكد من إلغاء الطلب؟')">
+                                <i class="bi bi-x-circle me-1"></i> إلغاء الطلب
+                            </button>
+                        </div>
                     </form>
                 @endif
             </div>

@@ -31,14 +31,6 @@
               @endif
             </a>
 
-            <div class="mt-4 mb-2">
-                <small class="text-white-50 px-3 fw-bold">العودة</small>
-            </div>
-            
-            <a href="{{ route('dashboard.main') }}" class="list-group-item list-group-item-action">
-              <i class="bi bi-arrow-right-circle-fill ms-2"></i> لوحة المستخدم
-            </a>
-
           </div>
         </div>
       </aside>

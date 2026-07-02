@@ -120,12 +120,18 @@
   {{-- Desktop: inline links --}}
   <div class="collapse navbar-collapse d-none d-lg-flex" id="mainNavbar">
     <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-lg-1">
+      @if(!auth()->check() || auth()->user()->user_role !== 'admin')
       <li class="nav-item">
         <a class="nav-link text-success" href="{{ route('main.requests') }}">الطلبات المتاحة</a>
       </li>
+      @endif
       @auth
         <li class="nav-item">
-          <a class="nav-link text-primary" href="{{ route('dashboard.main') }}">لوحة التحكم</a>
+          @if(auth()->user()->user_role === 'admin')
+            <a class="nav-link text-primary" href="{{ route('dashboard.categories.index') }}">لوحة الإدارة</a>
+          @else
+            <a class="nav-link text-primary" href="{{ route('dashboard.main') }}">لوحة التحكم</a>
+          @endif
         </li>
       @endauth
     </ul>
@@ -163,6 +169,7 @@
 
   <div class="offcanvas-body d-flex flex-column p-2">
 
+    @if(!auth()->check() || auth()->user()->user_role !== 'admin')
     {{-- Main navigation --}}
     <p class="mob-section-label">القائمة الرئيسية</p>
     <a href="{{ route('main.showLanding') }}" class="mob-nav-link">
@@ -171,31 +178,40 @@
     <a href="{{ route('main.requests') }}" class="mob-nav-link">
       <i class="bi bi-search"></i> الطلبات المتاحة
     </a>
+    @endif
 
     @auth
-      {{-- Dashboard links --}}
-      <p class="mob-section-label mt-2">لوحة التحكم</p>
-      <a href="{{ route('dashboard.main') }}" class="mob-nav-link">
-        <i class="bi bi-grid-1x2-fill"></i> الرئيسية
-      </a>
-      <a href="{{ route('dashboard.requests.index') }}" class="mob-nav-link">
-        <i class="bi bi-file-earmark-text-fill"></i> طلباتي
-      </a>
-      <a href="{{ route('dashboard.offers.myOffers') }}" class="mob-nav-link">
-        <i class="bi bi-tag-fill"></i> عروضي
-      </a>
-      <a href="#" class="mob-nav-link">
-        <i class="bi bi-person-check-fill"></i> طلبات التحقق
-      </a>
-      <a href="{{ route('dashboard.orders.index') }}" class="mob-nav-link">
-        <i class="bi bi-briefcase-fill"></i> الخدمات
-      </a>
-      <a href="#" class="mob-nav-link">
-        <i class="bi bi-flag-fill"></i> البلاغات
-      </a>
-      <a href="#" class="mob-nav-link">
-        <i class="bi bi-gear-fill"></i> الإعدادات
-      </a>
+      @if(auth()->user()->user_role === 'admin')
+        {{-- Admin Dashboard links --}}
+        <p class="mob-section-label mt-2">إدارة الموقع</p>
+        <a href="{{ route('dashboard.categories.index') }}" class="mob-nav-link {{ request()->routeIs('dashboard.categories.*') ? 'active' : '' }}">
+          <i class="bi bi-tags-fill"></i> إدارة التصنيفات
+        </a>
+        <a href="{{ route('dashboard.disputes.index') }}" class="mob-nav-link d-flex justify-content-between align-items-center {{ request()->routeIs('dashboard.disputes.*') ? 'active' : '' }}">
+          <div class="d-flex align-items-center" style="gap: 10px;">
+            <i class="bi bi-shield-exclamation"></i> <span>إدارة النزاعات</span>
+          </div>
+          @php $openDisputes = \App\Models\OrderDispute::where('status','open')->count(); @endphp
+          @if($openDisputes > 0)
+            <span class="badge bg-danger rounded-pill">{{ $openDisputes }}</span>
+          @endif
+        </a>
+      @else
+        {{-- User Dashboard links --}}
+        <p class="mob-section-label mt-2">لوحة التحكم</p>
+        <a href="{{ route('dashboard.main') }}" class="mob-nav-link {{ request()->routeIs('dashboard.main') ? 'active' : '' }}">
+          <i class="bi bi-grid-1x2-fill"></i> الرئيسية
+        </a>
+        <a href="{{ route('dashboard.requests.index') }}" class="mob-nav-link {{ request()->routeIs('dashboard.requests.*') ? 'active' : '' }}">
+          <i class="bi bi-file-earmark-text-fill"></i> طلباتي
+        </a>
+        <a href="{{ route('dashboard.offers.myOffers') }}" class="mob-nav-link {{ request()->routeIs('dashboard.offers.*') ? 'active' : '' }}">
+          <i class="bi bi-tag-fill"></i> عروضي
+        </a>
+        <a href="{{ route('dashboard.orders.index') }}" class="mob-nav-link {{ request()->routeIs('dashboard.orders.*') ? 'active' : '' }}">
+          <i class="bi bi-briefcase-fill"></i> الخدمات
+        </a>
+      @endif
     @endauth
 
     {{-- Auth buttons pinned to bottom --}}
