@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\dashboard\users;
+namespace App\Http\Controllers\dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
@@ -219,6 +219,9 @@ class OrderActionController extends Controller
                     'cancellation_reason' => $cancellationRequest->reason,
                 ]);
                 $order->serviceRequest->update(['status' => 'open']);
+                if ($order->offer_id) {
+                    \App\Models\Offer::where('id', $order->offer_id)->update(['status' => 'rejected']);
+                }
             } else {
                 $cancellationRequest->update([
                     'status'       => 'rejected',

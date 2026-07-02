@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\dashboard\admin;
+namespace App\Http\Controllers\dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\OrderDispute;
@@ -41,6 +41,10 @@ class AdminDisputesController extends Controller
 
             // Mark the order as cancelled when resolved
             $dispute->order->update(['status' => 'cancelled']);
+            $dispute->order->serviceRequest->update(['status' => 'open']);
+            if ($dispute->order->offer_id) {
+                \App\Models\Offer::where('id', $dispute->order->offer_id)->update(['status' => 'rejected']);
+            }
         });
 
         return redirect()->back()->with('success', 'تم حل النزاع وإغلاق الطلب بنجاح.');

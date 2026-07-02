@@ -1,4 +1,4 @@
-@extends('layout.dash')
+@extends('layouts.app')
 
 @section('title', 'طلباتي | NeedLink')
 
@@ -69,7 +69,7 @@
         @else
             <div class="orders-grid-view row row-cols-1 row-cols-lg-2 g-4">
                 @foreach($clientOrders as $order)
-                    @include('dashboard.users.orders.partials.order_card', ['order' => $order, 'role' => 'client'])
+                    @include('dashboard.orders._card', ['order' => $order, 'role' => 'client'])
                 @endforeach
             </div>
             
@@ -142,7 +142,7 @@
         @else
             <div class="orders-grid-view row row-cols-1 row-cols-lg-2 g-4">
                 @foreach($providerOrders as $order)
-                    @include('dashboard.users.orders.partials.order_card', ['order' => $order, 'role' => 'provider'])
+                    @include('dashboard.orders._card', ['order' => $order, 'role' => 'provider'])
                 @endforeach
             </div>
             

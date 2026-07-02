@@ -23,12 +23,12 @@
 
 <body class="admin-body">
 
-    @include('layout.navbar')
+    @include('layouts.partials.navbar')
 
     <div class="container-fluid">
         <div class="row min-vh-100">
 
-            @include('layout.adminSideDesktop')
+            @include('layouts.partials.admin_sidebar')
 
             <main class="col-lg-9 col-xl-10 admin-main-simple p-0">
 

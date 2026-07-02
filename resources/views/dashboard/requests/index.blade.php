@@ -1,4 +1,4 @@
-@extends('layout.dash')
+@extends('layouts.app')
 @section('title')
     NeedLink - طلباتي
 @endsection
@@ -207,7 +207,7 @@
     </section>
 
     {{-- Include the request form modal --}}
-    @include('dashboard.users.partials._request_form_modal')
+    @include('dashboard.requests._form_modal')
 
 @endsection
 

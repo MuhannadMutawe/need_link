@@ -3,11 +3,11 @@
 use App\Http\Controllers\auth\LoginController;
 use App\Http\Controllers\auth\RegisterController;
 use App\Http\Controllers\dashboard\DashboardController;
-use App\Http\Controllers\dashboard\users\requests\RequestsController;
-use App\Http\Controllers\dashboard\users\offers\OffersController;
-use App\Http\Controllers\dashboard\admin\CategoryController;
-use App\Http\Controllers\dashboard\admin\AdminDisputesController;
-use App\Http\Controllers\main\MainController;
+use App\Http\Controllers\dashboard\RequestsController;
+use App\Http\Controllers\dashboard\OffersController;
+use App\Http\Controllers\dashboard\AdminCategoryController;
+use App\Http\Controllers\dashboard\AdminDisputesController;
+use App\Http\Controllers\MainController;
 use Illuminate\Support\Facades\Route;
 
 // Main Routes
@@ -43,7 +43,7 @@ Route::prefix('dashboard')->name('dashboard.')->group(function () {
     });
 
     // Admin Categories Routes
-    Route::prefix('categories')->name('categories.')->controller(CategoryController::class)->group(function () {
+    Route::prefix('categories')->name('categories.')->controller(AdminCategoryController::class)->group(function () {
         Route::get('/', 'index')->name('index');
         Route::post('/', 'store')->name('store');
         Route::put('{category}', 'update')->name('update');
@@ -66,13 +66,13 @@ Route::prefix('dashboard')->name('dashboard.')->group(function () {
     });
 
     // User Orders Routes
-    Route::prefix('orders')->name('orders.')->controller(\App\Http\Controllers\dashboard\users\OrdersController::class)->group(function () {
+    Route::prefix('orders')->name('orders.')->controller(\App\Http\Controllers\dashboard\OrdersController::class)->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('{order}', 'show')->name('show');
     });
 
     // User Order Actions
-    Route::prefix('orders/{order}')->name('orders.actions.')->controller(\App\Http\Controllers\dashboard\users\OrderActionController::class)->group(function () {
+    Route::prefix('orders/{order}')->name('orders.actions.')->controller(\App\Http\Controllers\dashboard\OrderActionController::class)->group(function () {
         // Service order actions
         Route::post('delivery', 'submitDelivery')->name('delivery');
         Route::post('request-completion', 'requestCompletion')->name('requestCompletion');

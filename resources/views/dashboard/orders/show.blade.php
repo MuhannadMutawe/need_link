@@ -1,4 +1,4 @@
-@extends('layout.dash')
+@extends('layouts.app')
 
 @section('title', 'تفاصيل الطلب | NeedLink')
 

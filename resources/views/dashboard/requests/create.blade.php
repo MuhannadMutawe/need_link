@@ -1,4 +1,4 @@
-@extends('layout.dash')
+@extends('layouts.app')
 @section('title')
     NeedLink - إنشاء طلب جديد
 @endsection

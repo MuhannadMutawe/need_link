@@ -1,4 +1,4 @@
-@extends('layout.dash')
+@extends('layouts.app')
 @section('content')
 
 <style>
@@ -599,7 +599,7 @@
 
                         {{-- Card footer: action buttons --}}
                         <div class="offer-footer">
-                            @if($isRequester)
+                            @if($isRequester && $serviceRequest->status === 'open')
                                 <button type="button" class="btn-accept" onclick="handleOfferAction('{{ route('dashboard.requests.offers.accept', [$serviceRequest->id, $offer->id]) }}', 'POST', this)">
                                     <i class="bi bi-check-lg"></i> Accept Offer
                                 </button>

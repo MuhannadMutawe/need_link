@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\dashboard\users;
+namespace App\Http\Controllers\dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
@@ -28,7 +28,7 @@ class OrdersController extends Controller
         $clientOrders = $clientOrdersQuery->orderBy('created_at', 'desc')->get();
         $providerOrders = $providerOrdersQuery->orderBy('created_at', 'desc')->get();
 
-        return view('dashboard.users.orders.index', compact('clientOrders', 'providerOrders', 'statusFilter', 'user'));
+        return view('dashboard.orders.index', compact('clientOrders', 'providerOrders', 'statusFilter', 'user'));
     }
 
     public function show(Order $order)
@@ -49,6 +49,6 @@ class OrdersController extends Controller
             'disputes'
         ]);
 
-        return view('dashboard.users.orders.show', compact('order', 'user'));
+        return view('dashboard.orders.show', compact('order', 'user'));
     }
 }

@@ -26,13 +26,13 @@
 
 <body class="admin-body">
 
-    @include('layout.navbar')
+    @include('layouts.partials.navbar')
 
 
     <div class="container-fluid">
         <div class="row min-vh-100">
 
-            @include('layout.sideDesktop')
+            @include('layouts.partials.sidebar_desktop')
             <main class="col-lg-9 col-xl-10 admin-main-simple p-0">
 
                @yield('content')

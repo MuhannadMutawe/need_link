@@ -1,4 +1,4 @@
-@extends('layout.master')
+@extends('layouts.web')
 @section('title')
     NeedLink - تسجيل الدخول
 @endsection

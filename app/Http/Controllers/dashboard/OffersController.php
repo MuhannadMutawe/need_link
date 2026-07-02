@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\dashboard\users\offers;
+namespace App\Http\Controllers\dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Offer;
@@ -21,7 +21,7 @@ class OffersController extends Controller
             return response()->json($offers);
         }
 
-    return view('dashboard.users.offers', compact('offers'));
+    return view('dashboard.offers', compact('offers'));
 
     }
 
@@ -42,7 +42,7 @@ class OffersController extends Controller
             return response()->json($offers);
         }
 
-        return view('dashboard.users.offers', compact('offers'));
+        return view('dashboard.offers', compact('offers'));
     }
 
     /**

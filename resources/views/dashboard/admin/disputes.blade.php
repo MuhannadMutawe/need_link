@@ -1,4 +1,4 @@
-@extends('layout.adminDash')
+@extends('layouts.admin')
 @section('content')
 
 <style>

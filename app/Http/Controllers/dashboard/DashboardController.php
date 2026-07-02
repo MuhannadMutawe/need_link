@@ -78,7 +78,7 @@ class DashboardController extends Controller
             + $deliveriesToReview->count()
             + $newOffers->count();
 
-        return view('dashboard.users.main', compact(
+        return view('dashboard.main', compact(
             'user',
             'pendingCompletions',
             'pendingCancellations',

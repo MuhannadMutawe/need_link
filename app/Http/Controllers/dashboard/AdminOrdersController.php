@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\dashboard\admin;
+namespace App\Http\Controllers\dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
@@ -61,6 +61,9 @@ class AdminOrdersController extends Controller
                     'cancellation_reason' => 'Dispute resolved in favour of client. ' . $validated['resolution_note'],
                 ]);
                 $order->serviceRequest->update(['status' => 'open']);
+                if ($order->offer_id) {
+                    \App\Models\Offer::where('id', $order->offer_id)->update(['status' => 'rejected']);
+                }
             }
         });
 

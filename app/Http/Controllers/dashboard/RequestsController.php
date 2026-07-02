@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\dashboard\users\requests;
+namespace App\Http\Controllers\dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\ServiceRequest;
@@ -35,7 +35,7 @@ class RequestsController extends Controller implements HasMiddleware
             return response()->json($requests);
         }
 
-        return view('dashboard.users.requests', compact('requests', 'sortField', 'categories'));
+        return view('dashboard.requests.index', compact('requests', 'sortField', 'categories'));
     }
 
     /**
@@ -49,7 +49,7 @@ class RequestsController extends Controller implements HasMiddleware
             return response()->json($serviceRequest);
         }
 
-        return view('dashboard.users.request_show', compact('serviceRequest'));
+        return view('dashboard.requests.show', compact('serviceRequest'));
     }
 
 
@@ -169,6 +169,6 @@ class RequestsController extends Controller implements HasMiddleware
     public function create()
     {
         $categories = \App\Models\Category::all();
-        return view("dashboard.users.requests_create", compact("categories"));
+        return view("dashboard.requests.create", compact("categories"));
     }
 }

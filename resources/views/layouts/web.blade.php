@@ -26,7 +26,7 @@
 
 <body>
 
-    @include('layout.navbar')
+    @include('layouts.partials.navbar')
     
     @yield('content')
 
